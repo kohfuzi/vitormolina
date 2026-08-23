@@ -25,7 +25,7 @@ export const PENDENTE = {
    * Enquanto for true, nenhuma coordenada é publicada (melhor sem do que errada).
    */
   geo: true,
-  cro: true, // ← CRO-SP do Dr. Vitor Molina (obrigatório por ética CFO)
+  cro: false, // ✔ preenchido
   redes: false, // ✔ Google, Instagram e Doctoralia preenchidos
 } as const;
 
@@ -50,8 +50,8 @@ export const DENTISTA = {
   /** Nome exato do Perfil da Empresa no Google — usado como alternateName no Schema.org. */
   nomeGoogle: 'Dr. Vitor Simon Molina | Dentista Campolim',
   cargo: 'Cirurgião-dentista',
-  cro: 'CRO-SP PREENCHER', // ← PREENCHER e trocar PENDENTE.cro para false
-  croNumero: 'PREENCHER',
+  cro: 'CRO-SP 135230',
+  croNumero: '135230',
   croEstado: 'SP',
   /**
    * Só liste aqui a especialidade REGISTRADA no CRO. Tudo o mais é

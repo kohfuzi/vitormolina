@@ -47,6 +47,16 @@ const ano = new Date().getFullYear();
         <a href={whatsappHref} target="_blank" rel="noopener">Agendar pelo WhatsApp</a>
       </address>
 
+      {
+        !PENDENTE.cro && (
+          <p class="rodape__rt">
+            <span>Responsável técnico</span>
+            <strong>{DENTISTA.nome}</strong>
+            <em>{DENTISTA.cro}</em>
+          </p>
+        )
+      }
+
       <ul class="rodape__perfis">
         {
           PERFIS.map((perfil) => (
@@ -167,11 +177,35 @@ const ano = new Date().getFullYear();
     flex-direction: column;
     gap: 0.35rem;
   }
+  .rodape__rt {
+    display: grid;
+    gap: 0.1rem;
+    margin: 1.1rem 0 0;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+  }
+  .rodape__rt span {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #d9bd8c;
+  }
+  .rodape__rt strong {
+    font-family: var(--fonte-display);
+    font-size: 1.02rem;
+    font-weight: 600;
+    color: #ffffff;
+  }
+  .rodape__rt em {
+    font-style: normal;
+    font-size: 0.9rem;
+    color: #b9cfc9;
+  }
   .rodape__perfis {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
-    margin-top: 1rem;
+    margin-top: 1.4rem;
   }
   .rodape__perfis li {
     margin: 0;

@@ -74,7 +74,7 @@ export function pessoaSchema() {
             credentialCategory: 'Registro profissional',
             recognizedBy: {
               '@type': 'Organization',
-              name: `Conselho Regional de Odontologia de ${DENTISTA.croEstado}`,
+              name: `Conselho Regional de Odontologia de ${NAP.estadoExtenso}`,
             },
           },
         }),
