@@ -1,0 +1,73 @@
+---
+import type { Fato } from '../data/tipos';
+
+export interface Props {
+  titulo?: string;
+  fatos: Fato[];
+}
+const { titulo = 'Resumo rápido', fatos } = Astro.props;
+---
+
+<aside class="fatos" aria-label={titulo}>
+  <h2 class="fatos__titulo">{titulo}</h2>
+  <dl>
+    {
+      fatos.map((f) => (
+        <div class="fatos__linha">
+          <dt>{f.rotulo}</dt>
+          <dd>{f.valor}</dd>
+        </div>
+      ))
+    }
+  </dl>
+</aside>
+
+<style>
+  .fatos {
+    background: var(--papel);
+    border: 1px solid var(--borda);
+    border-left: 3px solid var(--dourado);
+    border-radius: var(--raio-p);
+    padding: 1.25rem 1.4rem;
+    margin: 0 0 2rem;
+  }
+  .fatos__titulo {
+    font-family: var(--fonte-corpo);
+    font-size: 0.76rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dourado);
+    margin: 0 0 0.9rem;
+  }
+  dl {
+    margin: 0;
+    display: grid;
+    gap: 0.55rem;
+  }
+  .fatos__linha {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.1rem;
+    padding-bottom: 0.55rem;
+    border-bottom: 1px solid var(--borda);
+  }
+  .fatos__linha:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+  @media (min-width: 560px) {
+    .fatos__linha {
+      grid-template-columns: minmax(0, 15rem) 1fr;
+      gap: 1rem;
+    }
+  }
+  dt {
+    font-size: 0.9rem;
+    color: var(--tinta-suave);
+  }
+  dd {
+    margin: 0;
+    font-weight: 600;
+    font-size: 0.97rem;
+  }
+</style>

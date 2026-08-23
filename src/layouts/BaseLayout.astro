@@ -1,0 +1,116 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import WhatsAppFlutuante from '../components/WhatsAppFlutuante.astro';
+import { NAP, PENDENTE, SITE } from '../data/site';
+import { limitarDescricao, montarTitulo, urlAbsoluta } from '../lib/seo';
+
+export interface Props {
+  titulo: string;
+  descricao: string;
+  caminho: string;
+  tipoOg?: 'website' | 'article';
+  schema?: unknown;
+  publicadoEm?: string;
+  atualizadoEm?: string;
+  naoIndexar?: boolean;
+}
+
+const {
+  titulo,
+  descricao,
+  caminho,
+  tipoOg = 'website',
+  schema,
+  publicadoEm,
+  atualizadoEm,
+  naoIndexar = false,
+} = Astro.props;
+
+const canonica = urlAbsoluta(caminho);
+const tituloFinal = montarTitulo(titulo);
+const descricaoFinal = limitarDescricao(descricao);
+const imagemOg = urlAbsoluta('/og.png');
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{tituloFinal}</title>
+    <meta name="description" content={descricaoFinal} />
+    <link rel="canonical" href={canonica} />
+
+    {
+      naoIndexar ? (
+        <meta name="robots" content="noindex, nofollow" />
+      ) : (
+        <meta
+          name="robots"
+          content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+        />
+      )
+    }
+
+    <!-- Idioma e alternativas -->
+    <link rel="alternate" hreflang="pt-BR" href={canonica} />
+    <link rel="alternate" hreflang="x-default" href={canonica} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={tipoOg} />
+    <meta property="og:site_name" content={SITE.nome} />
+    <meta property="og:locale" content={SITE.locale} />
+    <meta property="og:url" content={canonica} />
+    <meta property="og:title" content={tituloFinal} />
+    <meta property="og:description" content={descricaoFinal} />
+    <meta property="og:image" content={imagemOg} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={SITE.nomeCompleto} />
+    {publicadoEm && <meta property="article:published_time" content={publicadoEm} />}
+    {atualizadoEm && <meta property="article:modified_time" content={atualizadoEm} />}
+
+    <!-- Twitter/X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={tituloFinal} />
+    <meta name="twitter:description" content={descricaoFinal} />
+    <meta name="twitter:image" content={imagemOg} />
+
+    <!-- Sinais geográficos clássicos de SEO local -->
+    <meta name="geo.region" content={`BR-${NAP.estado}`} />
+    <meta name="geo.placename" content={NAP.cidade} />
+    {!PENDENTE.geo && <meta name="geo.position" content={`${NAP.latitude};${NAP.longitude}`} />}
+    {!PENDENTE.geo && <meta name="ICBM" content={`${NAP.latitude}, ${NAP.longitude}`} />}
+
+    <meta name="author" content={SITE.nome} />
+    <meta name="theme-color" content={SITE.themeColor} />
+    <meta name="format-detection" content="telephone=no" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
+
+    {
+      schema && (
+        <script
+          type="application/ld+json"
+          set:html={JSON.stringify(schema)}
+          is:inline
+        />
+      )
+    }
+  </head>
+  <body>
+    <a class="pular-para-conteudo" href="#conteudo">Pular para o conteúdo</a>
+    <Header />
+    <main id="conteudo">
+      <slot />
+    </main>
+    <Footer />
+    <WhatsAppFlutuante />
+  </body>
+</html>

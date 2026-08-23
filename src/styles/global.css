@@ -1,0 +1,350 @@
+/* ============================================================
+   Base do site — Dr. Vitor Molina
+   Sem framework e sem JavaScript de layout: o CSS é curto de
+   propósito para manter o LCP baixo (fator de ranqueamento).
+   ============================================================ */
+
+:root {
+  --tinta: #12211f;
+  --tinta-suave: #48605c;
+  --petroleo: #0f3d3e;
+  --petroleo-claro: #1b5c5d;
+  --petroleo-fundo: #e8f0ee;
+  --areia: #f7f4ef;
+  --papel: #ffffff;
+  --dourado: #a67c3d;
+  --dourado-suave: #f3ead9;
+  --borda: rgba(18, 33, 31, 0.12);
+  --borda-forte: rgba(18, 33, 31, 0.22);
+  --sombra: 0 1px 2px rgba(18, 33, 31, 0.04), 0 8px 24px rgba(18, 33, 31, 0.06);
+  --sombra-alta: 0 2px 4px rgba(18, 33, 31, 0.06), 0 18px 44px rgba(18, 33, 31, 0.1);
+  --raio: 14px;
+  --raio-p: 8px;
+  --largura: 1120px;
+  --largura-texto: 68ch;
+  --fonte-display: 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
+  --fonte-corpo: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--areia);
+  color: var(--tinta);
+  font-family: var(--fonte-corpo);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img,
+svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--fonte-display);
+  font-weight: 600;
+  line-height: 1.18;
+  letter-spacing: -0.012em;
+  margin: 0 0 0.5em;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: clamp(2rem, 1.35rem + 2.6vw, 3.1rem);
+}
+h2 {
+  font-size: clamp(1.5rem, 1.2rem + 1.3vw, 2.1rem);
+}
+h3 {
+  font-size: clamp(1.18rem, 1.06rem + 0.55vw, 1.42rem);
+}
+
+p {
+  margin: 0 0 1.05em;
+  text-wrap: pretty;
+}
+
+a {
+  color: var(--petroleo);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+a:hover {
+  color: var(--dourado);
+}
+
+ul,
+ol {
+  padding-left: 1.15rem;
+  margin: 0 0 1.15em;
+}
+li {
+  margin-bottom: 0.4em;
+}
+
+strong {
+  font-weight: 650;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--borda);
+  margin: 2.5rem 0;
+}
+
+:focus-visible {
+  outline: 3px solid var(--dourado);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ---------- estrutura ---------- */
+
+.container {
+  width: 100%;
+  max-width: var(--largura);
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+.secao {
+  padding: clamp(3rem, 6vw, 5rem) 0;
+}
+.secao--compacta {
+  padding: clamp(2rem, 4vw, 3rem) 0;
+}
+.secao--papel {
+  background: var(--papel);
+}
+.secao--petroleo {
+  background: var(--petroleo);
+  color: #eaf2f0;
+}
+.secao--petroleo h2,
+.secao--petroleo h3 {
+  color: #ffffff;
+}
+/* links de texto ficam brancos, mas botões mantêm o próprio contraste */
+.secao--petroleo a:not(.btn) {
+  color: #ffffff;
+}
+
+.prosa {
+  max-width: var(--largura-texto);
+}
+
+.grade {
+  display: grid;
+  gap: 1.25rem;
+}
+@media (min-width: 640px) {
+  .grade--2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 900px) {
+  .grade--3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .grade--4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.olho {
+  display: inline-block;
+  font-family: var(--fonte-corpo);
+  font-size: 0.78rem;
+  font-weight: 620;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dourado);
+  margin-bottom: 0.85rem;
+}
+.secao--petroleo .olho {
+  color: #d9bd8c;
+}
+
+/* ---------- botões ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.5rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: transform 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+.btn:hover {
+  transform: translateY(-1px);
+}
+.btn--principal {
+  background: var(--petroleo);
+  color: #fff;
+}
+.btn--principal:hover {
+  background: var(--petroleo-claro);
+  color: #fff;
+}
+.btn--contorno {
+  border-color: var(--borda-forte);
+  color: var(--petroleo);
+  background: transparent;
+}
+.btn--contorno:hover {
+  border-color: var(--petroleo);
+  color: var(--petroleo);
+}
+.btn--claro {
+  background: #fff;
+  color: var(--petroleo);
+}
+.btn--claro:hover {
+  color: var(--petroleo);
+  background: #f2f7f5;
+}
+
+.botoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+/* ---------- cartões ---------- */
+
+.cartao {
+  display: flex;
+  flex-direction: column;
+  background: var(--papel);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  padding: 1.5rem;
+  box-shadow: var(--sombra);
+  transition: box-shadow 0.18s ease, transform 0.18s ease, border-color 0.18s ease;
+  text-decoration: none;
+  color: inherit;
+  height: 100%;
+}
+a.cartao:hover {
+  box-shadow: var(--sombra-alta);
+  transform: translateY(-2px);
+  border-color: var(--borda-forte);
+  color: inherit;
+}
+.cartao h3 {
+  margin-bottom: 0.35rem;
+}
+.cartao p {
+  color: var(--tinta-suave);
+  font-size: 0.97rem;
+  margin-bottom: 0.9rem;
+}
+.cartao__link {
+  margin-top: auto;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--petroleo);
+}
+
+/* ---------- tabelas ---------- */
+
+.tabela-envolucro {
+  overflow-x: auto;
+  margin: 0 0 1.5rem;
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-p);
+  background: var(--papel);
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.97rem;
+}
+th,
+td {
+  text-align: left;
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid var(--borda);
+  vertical-align: top;
+}
+th {
+  font-weight: 650;
+  background: var(--petroleo-fundo);
+  color: var(--petroleo);
+}
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* ---------- utilidades ---------- */
+
+.aviso {
+  font-size: 0.86rem;
+  color: var(--tinta-suave);
+  line-height: 1.55;
+}
+
+.pilulas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.pilulas li {
+  margin: 0;
+  font-size: 0.87rem;
+  padding: 0.32rem 0.8rem;
+  border-radius: 999px;
+  background: var(--petroleo-fundo);
+  color: var(--petroleo);
+  font-weight: 550;
+}
+
+.pular-para-conteudo {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--petroleo);
+  color: #fff;
+  padding: 0.75rem 1.25rem;
+  z-index: 100;
+}
+.pular-para-conteudo:focus {
+  left: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

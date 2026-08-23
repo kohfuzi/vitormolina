@@ -1,0 +1,67 @@
+---
+import type { Passo } from '../data/tipos';
+
+export interface Props {
+  passos: Passo[];
+  titulo?: string;
+}
+const { passos, titulo } = Astro.props;
+---
+
+<div class="passos">
+  {titulo && <h2>{titulo}</h2>}
+  <ol>
+    {
+      passos.map((p) => (
+        <li>
+          <h3>{p.titulo}</h3>
+          <p>{p.texto}</p>
+        </li>
+      ))
+    }
+  </ol>
+</div>
+
+<style>
+  .passos ol {
+    counter-reset: etapa;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 1.1rem;
+  }
+  .passos li {
+    counter-increment: etapa;
+    position: relative;
+    padding: 1.15rem 1.35rem 1.15rem 3.6rem;
+    background: var(--papel);
+    border: 1px solid var(--borda);
+    border-radius: var(--raio-p);
+    margin: 0;
+  }
+  .passos li::before {
+    content: counter(etapa);
+    position: absolute;
+    left: 1.15rem;
+    top: 1.15rem;
+    width: 1.9rem;
+    height: 1.9rem;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--petroleo);
+    color: #fff;
+    font-weight: 650;
+    font-size: 0.88rem;
+  }
+  .passos h3 {
+    font-size: 1.06rem;
+    margin-bottom: 0.3rem;
+  }
+  .passos p {
+    margin: 0;
+    color: var(--tinta-suave);
+    font-size: 0.97rem;
+  }
+</style>

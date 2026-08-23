@@ -1,0 +1,57 @@
+---
+export interface Props {
+  itens: { nome: string; url: string }[];
+}
+const { itens } = Astro.props;
+---
+
+<nav class="migalhas" aria-label="Você está aqui">
+  <div class="container">
+    <ol>
+      {
+        itens.map((item, i) => (
+          <li>
+            {i < itens.length - 1 ? (
+              <a href={item.url}>{item.nome}</a>
+            ) : (
+              <span aria-current="page">{item.nome}</span>
+            )}
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</nav>
+
+<style>
+  .migalhas {
+    background: var(--papel);
+    border-bottom: 1px solid var(--borda);
+    font-size: 0.85rem;
+  }
+  .migalhas ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    list-style: none;
+    padding: 0.7rem 0;
+    margin: 0;
+  }
+  .migalhas li {
+    margin: 0;
+    color: var(--tinta-suave);
+  }
+  .migalhas li + li::before {
+    content: '›';
+    margin-right: 0.4rem;
+    color: var(--borda-forte);
+  }
+  .migalhas a {
+    color: var(--tinta-suave);
+    text-decoration: none;
+  }
+  .migalhas a:hover {
+    color: var(--petroleo);
+    text-decoration: underline;
+  }
+</style>

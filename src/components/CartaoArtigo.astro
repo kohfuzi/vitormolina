@@ -1,0 +1,40 @@
+---
+import type { Artigo } from '../data/tipos';
+import { urlArtigo } from '../data/artigos';
+import { dataLegivel } from '../lib/seo';
+
+export interface Props {
+  artigo: Artigo;
+}
+const { artigo } = Astro.props;
+---
+
+<a class="cartao cartao--artigo" href={urlArtigo(artigo.slug)}>
+  <span class="cartao__meta">{artigo.categoria} · {artigo.tempoLeitura} min de leitura</span>
+  <h3>{artigo.titulo}</h3>
+  <p>{artigo.resumo}</p>
+  <span class="cartao__link">Ler o artigo →</span>
+  <time class="cartao__data" datetime={artigo.atualizadoEm}>
+    Atualizado em {dataLegivel(artigo.atualizadoEm)}
+  </time>
+</a>
+
+<style>
+  .cartao__meta {
+    font-size: 0.74rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dourado);
+    font-weight: 620;
+    margin-bottom: 0.6rem;
+  }
+  .cartao--artigo h3 {
+    font-size: 1.2rem;
+  }
+  .cartao__data {
+    display: block;
+    margin-top: 0.9rem;
+    font-size: 0.8rem;
+    color: var(--tinta-suave);
+  }
+</style>

@@ -1,0 +1,171 @@
+---
+import {
+  ATENDIMENTO,
+  AREA_ATENDIDA,
+  AVISO_ETICO,
+  DENTISTA,
+  HORARIO,
+  NAP,
+  NAV,
+  PENDENTE,
+  SITE,
+  enderecoLinha,
+  telHref,
+  whatsappHref,
+} from '../data/site';
+import { TRATAMENTOS, urlTratamento } from '../data/tratamentos';
+
+const ano = new Date().getFullYear();
+---
+
+<footer class="rodape">
+  <div class="container rodape__grade">
+    <div class="rodape__bloco">
+      <img src="/logo.jpg" alt={SITE.nome} width="56" height="56" class="rodape__logo" />
+      <p class="rodape__resumo">
+        Consultório odontológico em {NAP.cidade}, {NAP.estado}. Atendimento particular e {
+          ATENDIMENTO.convenios.join(', ')
+        }, com o mesmo profissional do diagnóstico ao acompanhamento.
+      </p>
+      <address class="rodape__nap">
+        <span>{enderecoLinha}</span>
+        {
+          !PENDENTE.telefone && (
+            <>
+              <a href={telHref}>{NAP.telefone}</a>
+              <a href={`mailto:${NAP.email}`}>{NAP.email}</a>
+            </>
+          )
+        }
+        <a href={whatsappHref} rel="noopener">Agendar pelo WhatsApp</a>
+      </address>
+    </div>
+
+    <div class="rodape__bloco">
+      <h2>Tratamentos</h2>
+      <ul>
+        {
+          TRATAMENTOS.map((t) => (
+            <li>
+              <a href={urlTratamento(t.slug)}>{t.titulo}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div class="rodape__bloco">
+      <h2>Navegação</h2>
+      <ul>
+        {
+          NAV.map((item) => (
+            <li>
+              <a href={item.href}>{item.label}</a>
+            </li>
+          ))
+        }
+        <li><a href="/dentista-porto-seguro-sorocaba/">Convênio Porto Seguro</a></li>
+        <li><a href="/dentista-sabado-sorocaba/">Atendimento aos sábados</a></li>
+      </ul>
+    </div>
+
+    <div class="rodape__bloco">
+      <h2>Horário</h2>
+      <ul class="rodape__horario">
+        <li>Segunda a sexta · 9h às 18h</li>
+        <li>Sábado · 9h às 12h</li>
+        <li>Domingo · fechado</li>
+      </ul>
+      <h2 class="rodape__subtitulo">Região atendida</h2>
+      <p class="rodape__regiao">{AREA_ATENDIDA.join(' · ')}</p>
+    </div>
+  </div>
+
+  <div class="container rodape__base">
+    <p class="aviso">{AVISO_ETICO}</p>
+    <p class="aviso">
+      © {ano} {DENTISTA.nome}
+      {!PENDENTE.cro && <> — {DENTISTA.cro}</>}. Todos os direitos reservados.
+      {HORARIO.resumo}.
+    </p>
+  </div>
+</footer>
+
+<style>
+  .rodape {
+    background: var(--petroleo);
+    color: #d7e5e1;
+    padding: clamp(2.5rem, 5vw, 4rem) 0 2rem;
+    font-size: 0.95rem;
+  }
+  .rodape__grade {
+    display: grid;
+    gap: 2rem;
+  }
+  @media (min-width: 700px) {
+    .rodape__grade {
+      grid-template-columns: 1.4fr 1fr 1fr 1fr;
+      gap: 2.5rem;
+    }
+  }
+  .rodape__logo {
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    width: 56px;
+    height: 56px;
+    object-fit: cover;
+  }
+  .rodape h2 {
+    font-family: var(--fonte-corpo);
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #d9bd8c;
+    margin-bottom: 0.9rem;
+  }
+  .rodape__subtitulo {
+    margin-top: 1.5rem;
+  }
+  .rodape ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .rodape li {
+    margin-bottom: 0.45rem;
+  }
+  .rodape a {
+    color: #eaf2f0;
+    text-decoration: none;
+  }
+  .rodape a:hover {
+    color: #fff;
+    text-decoration: underline;
+  }
+  .rodape__resumo {
+    color: #b9cfc9;
+    max-width: 34ch;
+  }
+  .rodape__nap {
+    font-style: normal;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  .rodape__horario li,
+  .rodape__regiao {
+    color: #b9cfc9;
+  }
+  .rodape__base {
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    display: grid;
+    gap: 0.6rem;
+  }
+  .rodape__base .aviso {
+    color: #9db8b2;
+    font-size: 0.82rem;
+    margin: 0;
+  }
+</style>

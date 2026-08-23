@@ -1,0 +1,364 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BlocoGeo from '../components/BlocoGeo.astro';
+import CartaoArtigo from '../components/CartaoArtigo.astro';
+import CartaoTratamento from '../components/CartaoTratamento.astro';
+import ChamadaFinal from '../components/ChamadaFinal.astro';
+import Perguntas from '../components/Perguntas.astro';
+import { artigosOrdenados } from '../data/artigos';
+import { FAQ_HOME } from '../data/faq';
+import { GEO_HOME } from '../data/geo';
+import { PAGINAS_FOCO } from '../data/paginas-foco';
+import { ATENDIMENTO, HORARIO, SITE, whatsappHref } from '../data/site';
+import { CATEGORIAS, TRATAMENTOS, tratamentosPorCategoria } from '../data/tratamentos';
+import {
+  consultorioSchema,
+  faqSchema,
+  grafo,
+  paginaSchema,
+  pessoaSchema,
+  siteSchema,
+} from '../lib/schema';
+import { urlAbsoluta } from '../lib/seo';
+
+const caminho = '/';
+const url = urlAbsoluta(caminho);
+const titulo = 'Dentista em Sorocaba | Particular e Porto Seguro';
+const descricao =
+  'Dentista em Sorocaba com atendimento particular e Porto Seguro. O Dr. Vitor Molina conduz o caso do diagnóstico ao acompanhamento, com plano de tratamento explicado antes de qualquer procedimento. Primeira avaliação sem custo.';
+
+const artigos = artigosOrdenados();
+
+const schema = grafo(
+  consultorioSchema(),
+  pessoaSchema(),
+  siteSchema(),
+  paginaSchema({ url, titulo, descricao, tipo: 'WebPage' }),
+  faqSchema(FAQ_HOME)
+);
+
+const provas = [
+  { rotulo: 'Particular e Porto Seguro', detalhe: 'As duas formas de atendimento no mesmo consultório' },
+  { rotulo: 'Primeira avaliação sem custo', detalhe: 'Diagnóstico e plano antes de qualquer procedimento' },
+  { rotulo: 'Sempre o mesmo dentista', detalhe: 'Do diagnóstico ao acompanhamento, sem repasse' },
+  { rotulo: 'Sábado de manhã', detalhe: 'Atendimento das 9h às 12h, com agendamento' },
+];
+---
+
+<BaseLayout titulo={titulo} descricao={descricao} caminho={caminho} schema={schema}>
+  <section class="heroi">
+    <div class="container heroi__interno">
+      <div class="heroi__texto">
+        <p class="olho">Dentista em Sorocaba · Particular e Porto Seguro</p>
+        <h1>Uma consulta sem pressa, com o dentista que vai te tratar do começo ao fim.</h1>
+        <p class="heroi__lead">
+          Em Sorocaba, atendimento particular e Porto Seguro, com planejamento explicado antes de
+          qualquer procedimento. A primeira avaliação não tem custo.
+        </p>
+        <div class="botoes">
+          <a class="btn btn--principal" href={whatsappHref} rel="noopener">Agendar avaliação</a>
+          <a class="btn btn--contorno" href="/tratamentos/">Ver tratamentos</a>
+        </div>
+        <ul class="heroi__linha">
+          <li>{HORARIO.resumo}</li>
+          <li>A partir dos {ATENDIMENTO.idadeMinimaCriancas} anos</li>
+          <li>Estacionamento na rua e em frente ao prédio</li>
+        </ul>
+      </div>
+      <aside class="heroi__cartao" aria-label="Resumo do atendimento">
+        <h2>O essencial, sem rodeio</h2>
+        <dl>
+          <div><dt>Onde</dt><dd>Sorocaba, São Paulo</dd></div>
+          <div><dt>Atendimento</dt><dd>Particular e Porto Seguro</dd></div>
+          <div><dt>Horário</dt><dd>Seg a Sex, 9h–18h · Sáb, 9h–12h</dd></div>
+          <div><dt>Primeira avaliação</dt><dd>Sem custo</dd></div>
+          <div><dt>Crianças</dt><dd>A partir dos 4 anos</dd></div>
+        </dl>
+        <a class="btn btn--principal heroi__cartao-btn" href={whatsappHref} rel="noopener">
+          Falar pelo WhatsApp
+        </a>
+      </aside>
+    </div>
+  </section>
+
+  <section class="provas">
+    <div class="container">
+      <ul>
+        {
+          provas.map((p) => (
+            <li>
+              <strong>{p.rotulo}</strong>
+              <span>{p.detalhe}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="secao secao--papel" id="consultorio">
+    <div class="container duas-colunas">
+      <div>
+        <p class="olho">Sobre o consultório</p>
+        <h2>Aqui quem atende é o Dr. Vitor Molina</h2>
+      </div>
+      <div class="prosa">
+        <p>
+          Do diagnóstico ao acompanhamento, sempre o mesmo profissional. É uma escolha, não uma
+          limitação: tratamento odontológico bem feito depende de continuidade, e continuidade se
+          perde quando cada consulta é com alguém diferente.
+        </p>
+        <p>
+          Cada plano é montado para o caso, e não a partir de um pacote pronto. Você sabe o que tem,
+          quais são as opções, quanto custa cada caminho e por que estamos recomendando um deles.
+          Sempre que for clinicamente possível, escolhemos a alternativa mais conservadora — a que
+          preserva mais estrutura do seu dente.
+        </p>
+        <p>
+          Não competimos por menor preço. Competimos por planejamento, técnica e acompanhamento.
+        </p>
+        <p><a href="/sobre/" class="cartao__link">Conhecer o consultório →</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="secao" id="tratamentos">
+    <div class="container">
+      <p class="olho">Tratamentos</p>
+      <h2>O que é feito no consultório</h2>
+      <p class="prosa">
+        Cada tratamento tem uma página com o que é, quando é indicado, como funciona etapa por etapa
+        e as dúvidas que mais aparecem na consulta.
+      </p>
+
+      {
+        CATEGORIAS.map((cat) => (
+          <div class="categoria">
+            <h3>{cat.titulo}</h3>
+            <p class="categoria__descricao">{cat.descricao}</p>
+            <div class="grade grade--3">
+              {tratamentosPorCategoria(cat.id).map((t) => (
+                <CartaoTratamento tratamento={t} />
+              ))}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="secao secao--papel" id="respostas">
+    <div class="container">
+      <p class="olho">Perguntas diretas</p>
+      <h2>Dentista em Sorocaba: o que você precisa saber antes de marcar</h2>
+      <p class="prosa">
+        As respostas abaixo são factuais e valem tanto para quem chega pela busca quanto para quem
+        pergunta a um assistente de IA sobre o consultório.
+      </p>
+      <div class="respostas">
+        <BlocoGeo blocos={GEO_HOME} />
+      </div>
+    </div>
+  </section>
+
+  <section class="secao">
+    <div class="container">
+      <p class="olho">Também procurados</p>
+      <h2>Convênio e horário</h2>
+      <div class="grade grade--2">
+        {
+          PAGINAS_FOCO.map((p) => (
+            <a class="cartao" href={`/${p.slug}/`}>
+              <h3>{p.h1}</h3>
+              <p>{p.metaDescricao}</p>
+              <span class="cartao__link">Ver detalhes →</span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="secao secao--papel" id="artigos">
+    <div class="container">
+      <p class="olho">Artigos</p>
+      <h2>Conteúdo para decidir com informação</h2>
+      <p class="prosa">
+        Textos escritos para explicar o que costuma ser explicado na consulta — sem promessa de
+        resultado e sem venda.
+      </p>
+      <div class="grade grade--3">
+        {artigos.map((a) => <CartaoArtigo artigo={a} />)}
+      </div>
+      <p class="mais"><a href="/artigos/" class="cartao__link">Ver todos os artigos →</a></p>
+    </div>
+  </section>
+
+  <section class="secao" id="duvidas">
+    <div class="container">
+      <div class="prosa">
+        <p class="olho">Dúvidas</p>
+        <Perguntas perguntas={FAQ_HOME} titulo="Perguntas frequentes" />
+        <p class="mais">
+          <a href="/perguntas-frequentes/" class="cartao__link">Ver todas as perguntas →</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <ChamadaFinal />
+</BaseLayout>
+
+<style>
+  .heroi {
+    background: linear-gradient(180deg, var(--papel) 0%, var(--areia) 100%);
+    padding: clamp(2.5rem, 6vw, 4.5rem) 0 clamp(2rem, 4vw, 3rem);
+  }
+  .heroi__interno {
+    display: grid;
+    gap: 2.5rem;
+    align-items: start;
+  }
+  @media (min-width: 940px) {
+    .heroi__interno {
+      grid-template-columns: 1.5fr 1fr;
+      gap: 4rem;
+    }
+  }
+  .heroi h1 {
+    max-width: 18ch;
+  }
+  .heroi__lead {
+    font-size: 1.15rem;
+    color: var(--tinta-suave);
+    max-width: 52ch;
+  }
+  .heroi__linha {
+    list-style: none;
+    padding: 0;
+    margin: 2rem 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    font-size: 0.9rem;
+    color: var(--tinta-suave);
+  }
+  .heroi__linha li {
+    margin: 0;
+    position: relative;
+    padding-left: 1.1rem;
+  }
+  .heroi__linha li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--dourado);
+  }
+
+  .heroi__cartao {
+    background: var(--papel);
+    border: 1px solid var(--borda);
+    border-radius: var(--raio);
+    padding: 1.6rem;
+    box-shadow: var(--sombra);
+  }
+  .heroi__cartao h2 {
+    font-size: 1.15rem;
+    margin-bottom: 1rem;
+  }
+  .heroi__cartao dl {
+    margin: 0 0 1.4rem;
+    display: grid;
+    gap: 0.7rem;
+  }
+  .heroi__cartao dl div {
+    display: grid;
+    gap: 0.1rem;
+    padding-bottom: 0.7rem;
+    border-bottom: 1px solid var(--borda);
+  }
+  .heroi__cartao dl div:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+  .heroi__cartao dt {
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--tinta-suave);
+  }
+  .heroi__cartao dd {
+    margin: 0;
+    font-weight: 600;
+  }
+  .heroi__cartao-btn {
+    width: 100%;
+  }
+
+  .provas {
+    background: var(--petroleo);
+    color: #eaf2f0;
+    padding: 1.5rem 0;
+  }
+  .provas ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 1.1rem;
+  }
+  @media (min-width: 780px) {
+    .provas ul {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+    }
+  }
+  .provas li {
+    margin: 0;
+    display: grid;
+    gap: 0.15rem;
+  }
+  .provas strong {
+    font-size: 0.98rem;
+  }
+  .provas span {
+    font-size: 0.85rem;
+    color: #a9c5be;
+  }
+
+  .duas-colunas {
+    display: grid;
+    gap: 1.5rem;
+  }
+  @media (min-width: 900px) {
+    .duas-colunas {
+      grid-template-columns: 1fr 1.4fr;
+      gap: 4rem;
+    }
+  }
+
+  .categoria {
+    margin-top: 2.5rem;
+  }
+  .categoria h3 {
+    font-size: 1.3rem;
+    margin-bottom: 0.3rem;
+  }
+  .categoria__descricao {
+    color: var(--tinta-suave);
+    max-width: 60ch;
+    margin-bottom: 1.5rem;
+  }
+
+  .respostas {
+    margin-top: 2rem;
+  }
+
+  .mais {
+    margin-top: 1.75rem;
+  }
+</style>

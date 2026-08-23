@@ -1,0 +1,107 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ChamadaFinal from '../components/ChamadaFinal.astro';
+import LinksRelacionados from '../components/LinksRelacionados.astro';
+import Migalhas from '../components/Migalhas.astro';
+import Perguntas from '../components/Perguntas.astro';
+import Secoes from '../components/Secoes.astro';
+import TabelaFatos from '../components/TabelaFatos.astro';
+import { PAGINAS_FOCO, type PaginaFoco } from '../data/paginas-foco';
+import { AVISO_ETICO, whatsappHref } from '../data/site';
+import { getTratamento, urlTratamento } from '../data/tratamentos';
+import {
+  consultorioSchema,
+  faqSchema,
+  grafo,
+  migalhasSchema,
+  paginaSchema,
+  pessoaSchema,
+  siteSchema,
+} from '../lib/schema';
+import { urlAbsoluta } from '../lib/seo';
+
+export function getStaticPaths() {
+  return PAGINAS_FOCO.map((p) => ({ params: { foco: p.slug }, props: { pagina: p } }));
+}
+
+interface Props {
+  pagina: PaginaFoco;
+}
+
+const { pagina: p } = Astro.props;
+
+const caminho = `/${p.slug}/`;
+const url = urlAbsoluta(caminho);
+
+const migalhas = [
+  { nome: 'Início', url: '/' },
+  { nome: p.titulo, url: caminho },
+];
+
+const links = p.tratamentosRelacionados
+  .map((slug) => getTratamento(slug))
+  .filter((t) => Boolean(t))
+  .map((t) => ({ titulo: t!.h1, descricao: t!.resumo, url: urlTratamento(t!.slug) }));
+
+const schema = grafo(
+  consultorioSchema(),
+  pessoaSchema(),
+  siteSchema(),
+  paginaSchema({ url, titulo: p.tituloSeo, descricao: p.metaDescricao, tipo: 'WebPage' }),
+  migalhasSchema(migalhas),
+  faqSchema(p.faq)
+);
+---
+
+<BaseLayout
+  titulo={p.tituloSeo}
+  descricao={p.metaDescricao}
+  caminho={caminho}
+  schema={schema}
+>
+  <Migalhas itens={migalhas} />
+
+  <header class="topo">
+    <div class="container">
+      <p class="olho">{p.keyword}</p>
+      <h1>{p.h1}</h1>
+      <p class="topo__resposta">{p.respostaDireta}</p>
+      <div class="botoes">
+        <a class="btn btn--principal" href={whatsappHref} rel="noopener">Agendar avaliação</a>
+        <a class="btn btn--contorno" href="/tratamentos/">Ver tratamentos</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="secao secao--papel">
+    <div class="container prosa">
+      <TabelaFatos fatos={p.fatos} titulo="Resumo" />
+      <Secoes secoes={p.secoes} />
+      <Perguntas perguntas={p.faq} />
+      <p class="aviso disclaimer">{AVISO_ETICO}</p>
+      <LinksRelacionados links={links} />
+    </div>
+  </div>
+
+  <ChamadaFinal />
+</BaseLayout>
+
+<style>
+  .topo {
+    background: linear-gradient(180deg, var(--papel) 0%, var(--areia) 100%);
+    padding: clamp(2.25rem, 5vw, 3.5rem) 0;
+  }
+  .topo h1 {
+    max-width: 22ch;
+  }
+  .topo__resposta {
+    font-size: 1.12rem;
+    color: var(--tinta-suave);
+    max-width: 62ch;
+  }
+  .disclaimer {
+    margin-top: 2.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--borda);
+  }
+</style>

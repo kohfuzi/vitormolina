@@ -1,0 +1,198 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ChamadaFinal from '../../components/ChamadaFinal.astro';
+import LinksRelacionados from '../../components/LinksRelacionados.astro';
+import Migalhas from '../../components/Migalhas.astro';
+import Passos from '../../components/Passos.astro';
+import Perguntas from '../../components/Perguntas.astro';
+import TabelaFatos from '../../components/TabelaFatos.astro';
+import { artigosPorTratamento, urlArtigo } from '../../data/artigos';
+import { AVISO_ETICO, DENTISTA, PENDENTE, whatsappHref } from '../../data/site';
+import type { Tratamento } from '../../data/tipos';
+import { TRATAMENTOS, getTratamento, urlTratamento } from '../../data/tratamentos';
+import {
+  consultorioSchema,
+  faqSchema,
+  grafo,
+  migalhasSchema,
+  paginaSchema,
+  pessoaSchema,
+  siteSchema,
+  tratamentoSchema,
+} from '../../lib/schema';
+import { urlAbsoluta } from '../../lib/seo';
+
+export function getStaticPaths() {
+  return TRATAMENTOS.map((t) => ({ params: { slug: t.slug }, props: { tratamento: t } }));
+}
+
+interface Props {
+  tratamento: Tratamento;
+}
+
+const { tratamento: t } = Astro.props;
+
+const caminho = urlTratamento(t.slug);
+const url = urlAbsoluta(caminho);
+const titulo = t.tituloSeo ?? `${t.h1} | Dr. Vitor Molina`;
+const descricao = `${t.resumo} Atendimento particular e Porto Seguro, com o Dr. Vitor Molina.`;
+
+const migalhas = [
+  { nome: 'Início', url: '/' },
+  { nome: 'Tratamentos', url: '/tratamentos/' },
+  { nome: t.titulo, url: caminho },
+];
+
+const artigos = artigosPorTratamento(t.slug);
+const relacionados = t.relacionados
+  .map((slug) => getTratamento(slug))
+  .filter((x): x is Tratamento => Boolean(x));
+
+const links = [
+  ...relacionados.map((r) => ({
+    titulo: r.h1,
+    descricao: r.resumo,
+    url: urlTratamento(r.slug),
+  })),
+  ...artigos.map((a) => ({ titulo: a.titulo, descricao: a.resumo, url: urlArtigo(a.slug) })),
+];
+
+const schema = grafo(
+  consultorioSchema(),
+  pessoaSchema(),
+  siteSchema(),
+  paginaSchema({ url, titulo, descricao, tipo: 'MedicalWebPage' }),
+  migalhasSchema(migalhas),
+  tratamentoSchema(t, url),
+  faqSchema(t.faq)
+);
+---
+
+<BaseLayout titulo={titulo} descricao={descricao} caminho={caminho} schema={schema}>
+  <Migalhas itens={migalhas} />
+
+  <article>
+    <header class="topo">
+      <div class="container topo__interno">
+        <div>
+          <p class="olho">{t.areaInformativa} · Sorocaba</p>
+          <h1>{t.h1}</h1>
+          <p class="topo__resposta">{t.respostaDireta}</p>
+          <div class="botoes">
+            <a class="btn btn--principal" href={whatsappHref} rel="noopener">
+              Agendar avaliação
+            </a>
+            <a class="btn btn--contorno" href="#como-funciona">Ver as etapas</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="secao secao--papel">
+      <div class="container conteudo">
+        <div class="prosa">
+          <TabelaFatos fatos={t.fatos} titulo="Resumo do tratamento" />
+
+          <section id="o-que-e">
+            <h2>O que é {t.titulo.toLowerCase()}</h2>
+            {t.oQueE.map((p) => <p>{p}</p>)}
+          </section>
+
+          <section id="indicacoes">
+            <h2>Quando é indicado</h2>
+            <ul class="lista-marcada">
+              {t.indicacoes.map((i) => <li>{i}</li>)}
+            </ul>
+            <p class="aviso">
+              A presença de um desses sinais não fecha diagnóstico: a indicação depende de exame
+              clínico e, na maior parte dos casos, de exame de imagem.
+            </p>
+          </section>
+
+          <section id="como-funciona">
+            <h2>Como funciona, etapa por etapa</h2>
+            <Passos passos={t.comoFunciona} />
+          </section>
+
+          <section id="cuidados">
+            <h2>Cuidados e acompanhamento</h2>
+            <ul class="lista-marcada">
+              {t.cuidados.map((c) => <li>{c}</li>)}
+            </ul>
+          </section>
+
+          <section id="atendimento">
+            <h2>Como é o atendimento em Sorocaba</h2>
+            <p>
+              No consultório do Dr. Vitor Molina, todas as etapas — avaliação, planejamento,
+              execução e acompanhamento — ficam com o mesmo profissional. O plano de tratamento é
+              apresentado antes de qualquer procedimento, com as alternativas possíveis, o prazo de
+              cada uma e o custo de cada caminho.
+            </p>
+            <p>
+              O atendimento é particular ou pelo convênio <a href="/dentista-porto-seguro-sorocaba/"
+                >Porto Seguro</a
+              >, de segunda a sexta das 9h às 18h e <a href="/dentista-sabado-sorocaba/"
+                >aos sábados das 9h às 12h</a
+              >. A primeira avaliação não tem custo.
+            </p>
+          </section>
+
+          <Perguntas perguntas={t.faq} titulo={`Dúvidas sobre ${t.titulo.toLowerCase()}`} />
+
+          <p class="aviso disclaimer">{AVISO_ETICO}{!PENDENTE.cro && <> Responsável técnico: {DENTISTA.nome}, {DENTISTA.cro}.</>}</p>
+
+          <LinksRelacionados links={links} />
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <ChamadaFinal />
+</BaseLayout>
+
+<style>
+  .topo {
+    background: linear-gradient(180deg, var(--papel) 0%, var(--areia) 100%);
+    padding: clamp(2.25rem, 5vw, 3.5rem) 0;
+  }
+  .topo h1 {
+    max-width: 20ch;
+  }
+  .topo__resposta {
+    font-size: 1.12rem;
+    color: var(--tinta-suave);
+    max-width: 62ch;
+  }
+  .conteudo {
+    display: block;
+  }
+  .lista-marcada {
+    list-style: none;
+    padding: 0;
+  }
+  .lista-marcada li {
+    position: relative;
+    padding-left: 1.7rem;
+    margin-bottom: 0.6rem;
+  }
+  .lista-marcada li::before {
+    content: '';
+    position: absolute;
+    left: 0.15rem;
+    top: 0.62em;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--dourado);
+  }
+  section {
+    margin-bottom: 2.75rem;
+    scroll-margin-top: 90px;
+  }
+  .disclaimer {
+    margin-top: 2.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--borda);
+  }
+</style>

@@ -1,0 +1,223 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ChamadaFinal from '../../components/ChamadaFinal.astro';
+import LinksRelacionados from '../../components/LinksRelacionados.astro';
+import Migalhas from '../../components/Migalhas.astro';
+import Perguntas from '../../components/Perguntas.astro';
+import { FAQ_ATENDIMENTO } from '../../data/faq';
+import { ATENDIMENTO, AVISO_ETICO, DENTISTA, HORARIO, PENDENTE } from '../../data/site';
+import { TRATAMENTOS, urlTratamento } from '../../data/tratamentos';
+import {
+  consultorioSchema,
+  faqSchema,
+  grafo,
+  migalhasSchema,
+  paginaSchema,
+  pessoaSchema,
+  siteSchema,
+} from '../../lib/schema';
+import { urlAbsoluta } from '../../lib/seo';
+
+const caminho = '/sobre/';
+const url = urlAbsoluta(caminho);
+const titulo = 'O consultório e o Dr. Vitor Molina';
+const descricao =
+  'Consultório odontológico em Sorocaba onde o mesmo profissional conduz o caso do diagnóstico ao acompanhamento. Como funciona o atendimento, a primeira consulta e o plano de tratamento.';
+
+const migalhas = [
+  { nome: 'Início', url: '/' },
+  { nome: 'O consultório', url: caminho },
+];
+
+const schema = grafo(
+  consultorioSchema(),
+  pessoaSchema(),
+  siteSchema(),
+  paginaSchema({ url, titulo, descricao, tipo: 'AboutPage' }),
+  migalhasSchema(migalhas),
+  faqSchema(FAQ_ATENDIMENTO)
+);
+
+const principios = [
+  {
+    titulo: 'Continuidade',
+    texto:
+      'Diagnóstico, planejamento, execução e acompanhamento com o mesmo profissional. O histórico do caso não se perde entre consultas.',
+  },
+  {
+    titulo: 'Planejamento antes',
+    texto:
+      'Você sabe o que tem, quais são as opções, quanto custa cada caminho e por que um deles está sendo recomendado — antes de qualquer procedimento.',
+  },
+  {
+    titulo: 'A alternativa mais conservadora',
+    texto:
+      'Sempre que for clinicamente possível, a escolha recai sobre o caminho que preserva mais estrutura do seu dente.',
+  },
+  {
+    titulo: 'Tempo de consulta',
+    texto:
+      'A agenda é organizada para que a consulta caiba no tempo que o caso exige, e não o contrário.',
+  },
+];
+---
+
+<BaseLayout titulo={titulo} descricao={descricao} caminho={caminho} schema={schema}>
+  <Migalhas itens={migalhas} />
+
+  <header class="topo">
+    <div class="container topo__interno">
+      <div>
+        <p class="olho">O consultório</p>
+        <h1>Aqui quem atende é o Dr. Vitor Molina</h1>
+        <p class="topo__lead">
+          Do diagnóstico ao acompanhamento, sempre o mesmo profissional. É uma escolha, não uma
+          limitação: tratamento odontológico bem feito depende de continuidade, e continuidade se
+          perde quando cada consulta é com alguém diferente.
+        </p>
+      </div>
+      <aside class="ficha">
+        <h2>Ficha do consultório</h2>
+        <dl>
+          <div>
+            <dt>Profissional</dt>
+            <dd>{DENTISTA.nome}{!PENDENTE.cro && <> — {DENTISTA.cro}</>}</dd>
+          </div>
+          <div><dt>Atuação</dt><dd>{DENTISTA.atua.slice(0, 4).join(' · ')}</dd></div>
+          <div><dt>Cidade</dt><dd>Sorocaba, São Paulo</dd></div>
+          <div><dt>Atendimento</dt><dd>{ATENDIMENTO.formas.join(' e ')}</dd></div>
+          <div><dt>Horário</dt><dd>{HORARIO.texto}</dd></div>
+          <div><dt>Crianças</dt><dd>A partir dos {ATENDIMENTO.idadeMinimaCriancas} anos</dd></div>
+        </dl>
+      </aside>
+    </div>
+  </header>
+
+  <section class="secao secao--papel">
+    <div class="container prosa">
+      <h2>Como o tratamento é montado</h2>
+      <p>
+        Cada plano é montado para o caso, e não a partir de um pacote pronto. Você sabe o que tem,
+        quais são as opções, quanto custa cada caminho e por que estamos recomendando um deles.
+        Sempre que for clinicamente possível, escolhemos a alternativa mais conservadora — a que
+        preserva mais estrutura do seu dente.
+      </p>
+      <p>Não competimos por menor preço. Competimos por planejamento, técnica e acompanhamento.</p>
+      <p>
+        Na prática, isso significa uma primeira consulta que serve para entender o caso, e não para
+        vender procedimento. A avaliação inicial não tem custo, o diagnóstico é explicado com o
+        exame na mão e o plano de tratamento sai com etapas, prazos e valores. O que é urgente é
+        sinalizado como urgente; o que pode esperar, também.
+      </p>
+    </div>
+  </section>
+
+  <section class="secao">
+    <div class="container">
+      <p class="olho">Princípios</p>
+      <h2>O que orienta o atendimento</h2>
+      <div class="grade grade--4 principios">
+        {
+          principios.map((p) => (
+            <div class="cartao">
+              <h3>{p.titulo}</h3>
+              <p>{p.texto}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="secao secao--papel">
+    <div class="container prosa">
+      <Perguntas perguntas={FAQ_ATENDIMENTO} titulo="Como funciona, na prática" />
+      <p class="aviso disclaimer">{AVISO_ETICO}</p>
+      <LinksRelacionados
+        titulo="Tratamentos"
+        links={TRATAMENTOS.map((t) => ({
+          titulo: t.h1,
+          descricao: t.resumo,
+          url: urlTratamento(t.slug),
+        }))}
+      />
+    </div>
+  </section>
+
+  <ChamadaFinal />
+</BaseLayout>
+
+<style>
+  .topo {
+    background: linear-gradient(180deg, var(--papel) 0%, var(--areia) 100%);
+    padding: clamp(2.25rem, 5vw, 3.5rem) 0;
+  }
+  .topo__interno {
+    display: grid;
+    gap: 2.5rem;
+    align-items: start;
+  }
+  @media (min-width: 940px) {
+    .topo__interno {
+      grid-template-columns: 1.5fr 1fr;
+      gap: 4rem;
+    }
+  }
+  .topo__lead {
+    font-size: 1.12rem;
+    color: var(--tinta-suave);
+    max-width: 58ch;
+  }
+  .ficha {
+    background: var(--papel);
+    border: 1px solid var(--borda);
+    border-radius: var(--raio);
+    padding: 1.5rem;
+    box-shadow: var(--sombra);
+  }
+  .ficha h2 {
+    font-family: var(--fonte-corpo);
+    font-size: 0.76rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dourado);
+    margin-bottom: 1rem;
+  }
+  .ficha dl {
+    margin: 0;
+    display: grid;
+    gap: 0.65rem;
+  }
+  .ficha dl div {
+    display: grid;
+    gap: 0.1rem;
+    padding-bottom: 0.65rem;
+    border-bottom: 1px solid var(--borda);
+  }
+  .ficha dl div:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+  .ficha dt {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--tinta-suave);
+  }
+  .ficha dd {
+    margin: 0;
+    font-weight: 600;
+    font-size: 0.97rem;
+  }
+  .principios {
+    margin-top: 1.5rem;
+  }
+  .principios h3 {
+    font-size: 1.08rem;
+  }
+  .disclaimer {
+    margin-top: 2.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--borda);
+  }
+</style>

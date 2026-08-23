@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { NAV } from '../data/site';
+---
+
+<BaseLayout
+  titulo="Página não encontrada"
+  descricao="A página que você procurou não existe ou mudou de endereço. Veja os caminhos mais procurados do site do Dr. Vitor Molina, dentista em Sorocaba."
+  caminho="/404/"
+  naoIndexar={true}
+>
+  <section class="secao">
+    <div class="container prosa">
+      <p class="olho">Erro 404</p>
+      <h1>Essa página não existe mais</h1>
+      <p>
+        O endereço pode ter mudado ou o link pode estar incorreto. Estes são os caminhos mais
+        procurados do site:
+      </p>
+      <ul>
+        {NAV.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+        <li><a href="/dentista-porto-seguro-sorocaba/">Convênio Porto Seguro</a></li>
+        <li><a href="/dentista-sabado-sorocaba/">Atendimento aos sábados</a></li>
+      </ul>
+    </div>
+  </section>
+</BaseLayout>

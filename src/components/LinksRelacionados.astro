@@ -1,0 +1,68 @@
+---
+export interface Props {
+  titulo?: string;
+  links: { titulo: string; descricao?: string; url: string }[];
+}
+const { titulo = 'Continue por aqui', links } = Astro.props;
+---
+
+{
+  links.length > 0 && (
+    <nav class="relacionados" aria-label={titulo}>
+      <h2>{titulo}</h2>
+      <ul>
+        {links.map((l) => (
+          <li>
+            <a href={l.url}>
+              <strong>{l.titulo}</strong>
+              {l.descricao && <span>{l.descricao}</span>}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}
+
+<style>
+  .relacionados {
+    margin: 2.5rem 0 0;
+  }
+  .relacionados h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  .relacionados ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.7rem;
+  }
+  .relacionados li {
+    margin: 0;
+  }
+  .relacionados a {
+    display: grid;
+    gap: 0.2rem;
+    padding: 0.95rem 1.15rem;
+    background: var(--papel);
+    border: 1px solid var(--borda);
+    border-radius: var(--raio-p);
+    text-decoration: none;
+    color: var(--tinta);
+    transition: border-color 0.15s ease;
+  }
+  .relacionados a:hover {
+    border-color: var(--petroleo);
+    color: var(--tinta);
+  }
+  .relacionados strong {
+    color: var(--petroleo);
+    font-weight: 620;
+  }
+  .relacionados span {
+    font-size: 0.92rem;
+    color: var(--tinta-suave);
+  }
+</style>

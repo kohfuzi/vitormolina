@@ -1,0 +1,145 @@
+---
+import type { Secao } from '../data/tipos';
+
+export interface Props {
+  secoes: Secao[];
+}
+const { secoes } = Astro.props;
+---
+
+<div class="corpo">
+  {
+    secoes.map((secao) => (
+      <section id={secao.id} class="corpo__secao">
+        <h2>{secao.titulo}</h2>
+        {secao.blocos.map((bloco) => (
+          <Fragment>
+            {bloco.tipo === 'p' && <p>{bloco.texto}</p>}
+            {bloco.tipo === 'ul' && (
+              <ul>
+                {bloco.itens.map((i) => (
+                  <li>{i}</li>
+                ))}
+              </ul>
+            )}
+            {bloco.tipo === 'ol' && (
+              <ol class="corpo__passos">
+                {bloco.itens.map((i) => (
+                  <li>{i}</li>
+                ))}
+              </ol>
+            )}
+            {bloco.tipo === 'callout' && (
+              <aside class="destaque">
+                <h3>{bloco.titulo}</h3>
+                <ul>
+                  {bloco.itens.map((i) => (
+                    <li>{i}</li>
+                  ))}
+                </ul>
+              </aside>
+            )}
+            {bloco.tipo === 'tabela' && (
+              <div class="tabela-envolucro">
+                <table>
+                  <thead>
+                    <tr>
+                      {bloco.cabecalho.map((c) => (
+                        <th scope="col">{c}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {bloco.linhas.map((linha) => (
+                      <tr>
+                        {linha.map((celula, i) =>
+                          i === 0 ? <th scope="row">{celula}</th> : <td>{celula}</td>
+                        )}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </Fragment>
+        ))}
+        {secao.subsecoes?.map((sub) => (
+          <div id={sub.id} class="corpo__subsecao">
+            <h3>{sub.titulo}</h3>
+            {sub.blocos.map((bloco) => (
+              <Fragment>
+                {bloco.tipo === 'p' && <p>{bloco.texto}</p>}
+                {bloco.tipo === 'ul' && (
+                  <ul>
+                    {bloco.itens.map((i) => (
+                      <li>{i}</li>
+                    ))}
+                  </ul>
+                )}
+              </Fragment>
+            ))}
+          </div>
+        ))}
+      </section>
+    ))
+  }
+</div>
+
+<style>
+  .corpo__secao {
+    margin-bottom: 2.5rem;
+    scroll-margin-top: 90px;
+  }
+  .corpo__secao h2 {
+    margin-top: 0;
+  }
+  .corpo li::marker {
+    color: var(--dourado);
+  }
+  .corpo__passos {
+    counter-reset: passo;
+    list-style: none;
+    padding: 0;
+  }
+  .corpo__passos li {
+    counter-increment: passo;
+    position: relative;
+    padding-left: 2.6rem;
+    margin-bottom: 0.9rem;
+  }
+  .corpo__passos li::before {
+    content: counter(passo);
+    position: absolute;
+    left: 0;
+    top: 0.05rem;
+    width: 1.8rem;
+    height: 1.8rem;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--petroleo-fundo);
+    color: var(--petroleo);
+    font-weight: 650;
+    font-size: 0.9rem;
+  }
+  .destaque {
+    background: var(--dourado-suave);
+    border-radius: var(--raio-p);
+    padding: 1.25rem 1.4rem;
+    margin: 0 0 1.6rem;
+  }
+  .destaque h3 {
+    font-size: 1.05rem;
+    margin-bottom: 0.6rem;
+  }
+  .destaque ul {
+    margin: 0;
+    padding-left: 1.1rem;
+  }
+  .destaque li:last-child {
+    margin-bottom: 0;
+  }
+  .corpo__subsecao {
+    scroll-margin-top: 90px;
+  }
+</style>

@@ -1,0 +1,103 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CartaoTratamento from '../../components/CartaoTratamento.astro';
+import ChamadaFinal from '../../components/ChamadaFinal.astro';
+import Migalhas from '../../components/Migalhas.astro';
+import { AVISO_ETICO } from '../../data/site';
+import { CATEGORIAS, TRATAMENTOS, tratamentosPorCategoria, urlTratamento } from '../../data/tratamentos';
+import {
+  consultorioSchema,
+  grafo,
+  listaSchema,
+  migalhasSchema,
+  paginaSchema,
+  pessoaSchema,
+  siteSchema,
+} from '../../lib/schema';
+import { urlAbsoluta } from '../../lib/seo';
+
+const caminho = '/tratamentos/';
+const url = urlAbsoluta(caminho);
+const titulo = 'Tratamentos odontológicos em Sorocaba';
+const descricao =
+  'Implante, protocolo, tratamento de canal, alinhador invisível e harmonização orofacial em Sorocaba. Cada tratamento explicado: o que é, quando é indicado e como funciona.';
+
+const migalhas = [
+  { nome: 'Início', url: '/' },
+  { nome: 'Tratamentos', url: caminho },
+];
+
+const schema = grafo(
+  consultorioSchema(),
+  pessoaSchema(),
+  siteSchema(),
+  paginaSchema({ url, titulo, descricao, tipo: 'CollectionPage' }),
+  migalhasSchema(migalhas),
+  listaSchema(
+    'Tratamentos',
+    TRATAMENTOS.map((t) => ({ nome: t.h1, url: urlTratamento(t.slug) }))
+  )
+);
+---
+
+<BaseLayout titulo={titulo} descricao={descricao} caminho={caminho} schema={schema}>
+  <Migalhas itens={migalhas} />
+
+  <header class="topo">
+    <div class="container">
+      <p class="olho">Tratamentos</p>
+      <h1>Tratamentos odontológicos em Sorocaba</h1>
+      <p class="topo__lead">
+        Cada tratamento tem uma página própria com o que é, quando é indicado, como funciona etapa
+        por etapa, os cuidados depois e as dúvidas que mais aparecem na consulta. Tudo com o mesmo
+        profissional do começo ao fim, em atendimento particular ou Porto Seguro.
+      </p>
+    </div>
+  </header>
+
+  <div class="secao secao--papel">
+    <div class="container">
+      {
+        CATEGORIAS.map((cat) => (
+          <section class="bloco">
+            <h2>{cat.titulo}</h2>
+            <p class="bloco__descricao">{cat.descricao}</p>
+            <div class="grade grade--3">
+              {tratamentosPorCategoria(cat.id).map((t) => (
+                <CartaoTratamento tratamento={t} />
+              ))}
+            </div>
+          </section>
+        ))
+      }
+      <p class="aviso disclaimer">{AVISO_ETICO}</p>
+    </div>
+  </div>
+
+  <ChamadaFinal />
+</BaseLayout>
+
+<style>
+  .topo {
+    background: linear-gradient(180deg, var(--papel) 0%, var(--areia) 100%);
+    padding: clamp(2.25rem, 5vw, 3.5rem) 0;
+  }
+  .topo__lead {
+    font-size: 1.1rem;
+    color: var(--tinta-suave);
+    max-width: 66ch;
+  }
+  .bloco {
+    margin-bottom: 3rem;
+  }
+  .bloco__descricao {
+    color: var(--tinta-suave);
+    max-width: 62ch;
+    margin-bottom: 1.5rem;
+  }
+  .disclaimer {
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--borda);
+    max-width: 70ch;
+  }
+</style>

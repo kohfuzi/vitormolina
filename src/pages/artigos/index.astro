@@ -1,0 +1,88 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CartaoArtigo from '../../components/CartaoArtigo.astro';
+import ChamadaFinal from '../../components/ChamadaFinal.astro';
+import Migalhas from '../../components/Migalhas.astro';
+import { artigosOrdenados, urlArtigo } from '../../data/artigos';
+import { AVISO_ETICO } from '../../data/site';
+import {
+  consultorioSchema,
+  grafo,
+  listaSchema,
+  migalhasSchema,
+  paginaSchema,
+  pessoaSchema,
+  siteSchema,
+} from '../../lib/schema';
+import { urlAbsoluta } from '../../lib/seo';
+
+const caminho = '/artigos/';
+const url = urlAbsoluta(caminho);
+const titulo = 'Artigos sobre odontologia e harmonização orofacial';
+const descricao =
+  'Artigos escritos pelo Dr. Vitor Molina, dentista em Sorocaba: implante e protocolo, tratamento de canal e harmonização facial explicados sem promessa de resultado.';
+
+const artigos = artigosOrdenados();
+
+const migalhas = [
+  { nome: 'Início', url: '/' },
+  { nome: 'Artigos', url: caminho },
+];
+
+const schema = grafo(
+  consultorioSchema(),
+  pessoaSchema(),
+  siteSchema(),
+  paginaSchema({ url, titulo, descricao, tipo: 'CollectionPage' }),
+  migalhasSchema(migalhas),
+  listaSchema(
+    'Artigos',
+    artigos.map((a) => ({ nome: a.titulo, url: urlArtigo(a.slug) }))
+  )
+);
+---
+
+<BaseLayout titulo={titulo} descricao={descricao} caminho={caminho} schema={schema}>
+  <Migalhas itens={migalhas} />
+
+  <header class="topo">
+    <div class="container">
+      <p class="olho">Artigos</p>
+      <h1>Artigos</h1>
+      <p class="topo__lead">
+        Conteúdo educativo sobre os tratamentos feitos no consultório. A ideia é simples: colocar no
+        papel o que costuma ser explicado na cadeira, para que a decisão de tratar seja tomada com
+        informação — e não com pressa.
+      </p>
+    </div>
+  </header>
+
+  <div class="secao secao--papel">
+    <div class="container">
+      <div class="grade grade--3">
+        {artigos.map((a) => <CartaoArtigo artigo={a} />)}
+      </div>
+      <p class="aviso disclaimer">{AVISO_ETICO}</p>
+    </div>
+  </div>
+
+  <ChamadaFinal />
+</BaseLayout>
+
+<style>
+  .topo {
+    background: linear-gradient(180deg, var(--papel) 0%, var(--areia) 100%);
+    padding: clamp(2.25rem, 5vw, 3.5rem) 0;
+  }
+  .topo__lead {
+    font-size: 1.1rem;
+    color: var(--tinta-suave);
+    max-width: 66ch;
+  }
+  .disclaimer {
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--borda);
+    max-width: 70ch;
+  }
+</style>

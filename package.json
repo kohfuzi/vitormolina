@@ -1,0 +1,20 @@
+{
+  "name": "vitormolina",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "auditar": "astro build && node scripts/auditar.mjs",
+    "imagens": "node scripts/gerar-imagens.mjs",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^5.13.2",
+    "@astrojs/sitemap": "^3.4.1",
+    "sharp": "^0.34.2"
+  }
+}

@@ -1,0 +1,61 @@
+---
+import type { BlocoGeo } from '../data/geo';
+
+export interface Props {
+  blocos: BlocoGeo[];
+  titulo?: string;
+}
+const { blocos, titulo } = Astro.props;
+---
+
+<div class="geo">
+  {titulo && <h2 class="geo__titulo">{titulo}</h2>}
+  {
+    blocos.map((b) => (
+      <article class="geo__item">
+        <h3>{b.pergunta}</h3>
+        <p>{b.resposta}</p>
+        {b.pontos && (
+          <ul>
+            {b.pontos.map((p) => (
+              <li>{p}</li>
+            ))}
+          </ul>
+        )}
+      </article>
+    ))
+  }
+</div>
+
+<style>
+  .geo {
+    display: grid;
+    gap: 1.25rem;
+  }
+  .geo__titulo {
+    margin-bottom: 0.25rem;
+  }
+  .geo__item {
+    background: var(--papel);
+    border: 1px solid var(--borda);
+    border-radius: var(--raio);
+    padding: 1.4rem 1.5rem;
+  }
+  .geo__item h3 {
+    font-size: 1.12rem;
+    margin-bottom: 0.5rem;
+  }
+  .geo__item p {
+    margin-bottom: 0.8rem;
+    color: var(--tinta);
+  }
+  .geo__item ul {
+    margin: 0;
+    padding-left: 1.1rem;
+    color: var(--tinta-suave);
+    font-size: 0.95rem;
+  }
+  .geo__item li::marker {
+    color: var(--dourado);
+  }
+</style>

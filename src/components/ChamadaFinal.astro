@@ -1,0 +1,86 @@
+---
+import { ATENDIMENTO, HORARIO, whatsappHref, NAP, PENDENTE, telHref } from '../data/site';
+
+export interface Props {
+  titulo?: string;
+  texto?: string;
+}
+const {
+  titulo = 'A primeira avaliação não tem custo',
+  texto = 'Uma consulta sem pressa para entender o seu caso, com diagnóstico e plano de tratamento explicados antes de qualquer procedimento.',
+} = Astro.props;
+---
+
+<section class="secao secao--petroleo">
+  <div class="container chamada">
+    <div>
+      <p class="olho">Agende sua consulta</p>
+      <h2>{titulo}</h2>
+      <p class="chamada__texto">{texto}</p>
+      <div class="botoes">
+        <a class="btn btn--claro" href={whatsappHref} rel="noopener">Agendar pelo WhatsApp</a>
+        {!PENDENTE.telefone && <a class="btn btn--contorno btn--claro-contorno" href={telHref}>{NAP.telefone}</a>}
+      </div>
+    </div>
+    <ul class="chamada__fatos">
+      <li><strong>Horário</strong><span>{HORARIO.texto}</span></li>
+      <li><strong>Atendimento</strong><span>{ATENDIMENTO.formas.join(' e ')}</span></li>
+      <li><strong>Crianças</strong><span>A partir dos {ATENDIMENTO.idadeMinimaCriancas} anos</span></li>
+      <li><strong>Estacionamento</strong><span>{ATENDIMENTO.estacionamento}</span></li>
+    </ul>
+  </div>
+</section>
+
+<style>
+  .chamada {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+  }
+  @media (min-width: 860px) {
+    .chamada {
+      grid-template-columns: 1.15fr 1fr;
+      gap: 4rem;
+    }
+  }
+  .chamada__texto {
+    color: #c8dbd6;
+    max-width: 46ch;
+  }
+  .chamada__fatos {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.9rem;
+  }
+  .chamada__fatos li {
+    display: grid;
+    gap: 0.1rem;
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+    margin: 0;
+  }
+  .chamada__fatos li:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+  .chamada__fatos strong {
+    font-size: 0.76rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #d9bd8c;
+  }
+  .chamada__fatos span {
+    color: #eaf2f0;
+  }
+  .btn--claro-contorno {
+    border-color: rgba(255, 255, 255, 0.4);
+    color: #fff;
+    background: transparent;
+  }
+  .btn--claro-contorno:hover {
+    border-color: #fff;
+    color: #fff;
+  }
+</style>

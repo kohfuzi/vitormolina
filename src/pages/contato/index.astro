@@ -1,0 +1,224 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Migalhas from '../../components/Migalhas.astro';
+import Perguntas from '../../components/Perguntas.astro';
+import { FAQ_CONSULTORIO } from '../../data/faq';
+import {
+  ATENDIMENTO,
+  AVISO_ETICO,
+  HORARIO,
+  NAP,
+  PENDENTE,
+  enderecoLinha,
+  telHref,
+  whatsappHref,
+} from '../../data/site';
+import {
+  consultorioSchema,
+  faqSchema,
+  grafo,
+  migalhasSchema,
+  paginaSchema,
+  pessoaSchema,
+  siteSchema,
+} from '../../lib/schema';
+import { urlAbsoluta } from '../../lib/seo';
+
+const caminho = '/contato/';
+const url = urlAbsoluta(caminho);
+const titulo = 'Contato e agendamento';
+const descricao =
+  'Agende a avaliação no consultório do Dr. Vitor Molina em Sorocaba. Atendimento de segunda a sexta das 9h às 18h e sábado das 9h às 12h, particular e Porto Seguro.';
+
+const migalhas = [
+  { nome: 'Início', url: '/' },
+  { nome: 'Contato', url: caminho },
+];
+
+const schema = grafo(
+  consultorioSchema(),
+  pessoaSchema(),
+  siteSchema(),
+  paginaSchema({ url, titulo, descricao, tipo: 'ContactPage' }),
+  migalhasSchema(migalhas),
+  faqSchema(FAQ_CONSULTORIO)
+);
+
+const passos = [
+  'Envie mensagem pelo WhatsApp com dois horários de preferência.',
+  'Informe se o atendimento será particular ou pelo convênio Porto Seguro.',
+  'Descreva sua queixa principal — isso ajuda a preparar a consulta.',
+  'Confirme o horário e leve documento com foto (e a carteirinha, se tiver convênio).',
+];
+---
+
+<BaseLayout titulo={titulo} descricao={descricao} caminho={caminho} schema={schema}>
+  <Migalhas itens={migalhas} />
+
+  <header class="topo">
+    <div class="container">
+      <p class="olho">Contato</p>
+      <h1>Agendar a primeira avaliação</h1>
+      <p class="topo__lead">
+        O agendamento é feito pelo WhatsApp. A avaliação inicial não tem custo e serve para
+        diagnosticar o caso e apresentar as opções de tratamento.
+      </p>
+      <div class="botoes">
+        <a class="btn btn--principal" href={whatsappHref} rel="noopener">Falar pelo WhatsApp</a>
+        {!PENDENTE.telefone && <a class="btn btn--contorno" href={telHref}>{NAP.telefone}</a>}
+      </div>
+    </div>
+  </header>
+
+  <div class="secao secao--papel">
+    <div class="container contato">
+      <div class="prosa">
+        <h2>Como agendar</h2>
+        <ol class="passos-lista">
+          {passos.map((p) => <li>{p}</li>)}
+        </ol>
+
+        <h2>Onde fica</h2>
+        <p>
+          O consultório fica em {NAP.cidade}, {NAP.estadoExtenso}.
+          {
+            PENDENTE.endereco ? (
+              <>
+                {' '}O endereço completo e o ponto de referência são enviados junto com a confirmação
+                do horário.
+              </>
+            ) : (
+              <> {enderecoLinha}.</>
+            )
+          }
+          {' '}{ATENDIMENTO.estacionamento}
+        </p>
+        {!PENDENTE.geo && NAP.mapsUrl && (
+          <p><a class="btn btn--contorno" href={NAP.mapsUrl} rel="noopener">Abrir no Google Maps</a></p>
+        )}
+
+        <Perguntas perguntas={FAQ_CONSULTORIO} titulo="Antes de agendar" />
+        <p class="aviso disclaimer">{AVISO_ETICO}</p>
+      </div>
+
+      <aside class="painel">
+        <h2>Informações</h2>
+        <dl>
+          <div><dt>Horário</dt><dd>{HORARIO.texto}</dd></div>
+          <div><dt>Atendimento</dt><dd>{ATENDIMENTO.formas.join(' e ')}</dd></div>
+          <div><dt>Formas de pagamento</dt><dd>{ATENDIMENTO.pagamento.join(', ')}</dd></div>
+          <div><dt>Crianças</dt><dd>A partir dos {ATENDIMENTO.idadeMinimaCriancas} anos</dd></div>
+          <div><dt>Estacionamento</dt><dd>{ATENDIMENTO.estacionamento}</dd></div>
+          {!PENDENTE.telefone && (
+            <div><dt>Telefone</dt><dd><a href={telHref}>{NAP.telefone}</a></dd></div>
+          )}
+          {!PENDENTE.telefone && (
+            <div><dt>E-mail</dt><dd><a href={`mailto:${NAP.email}`}>{NAP.email}</a></dd></div>
+          )}
+        </dl>
+        <a class="btn btn--principal painel__btn" href={whatsappHref} rel="noopener">
+          Agendar pelo WhatsApp
+        </a>
+      </aside>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .topo {
+    background: linear-gradient(180deg, var(--papel) 0%, var(--areia) 100%);
+    padding: clamp(2.25rem, 5vw, 3.5rem) 0;
+  }
+  .topo__lead {
+    font-size: 1.1rem;
+    color: var(--tinta-suave);
+    max-width: 58ch;
+  }
+  .contato {
+    display: grid;
+    gap: 2.5rem;
+    align-items: start;
+  }
+  @media (min-width: 940px) {
+    .contato {
+      grid-template-columns: 1.5fr 1fr;
+      gap: 4rem;
+    }
+  }
+  .passos-lista {
+    counter-reset: p;
+    list-style: none;
+    padding: 0;
+  }
+  .passos-lista li {
+    counter-increment: p;
+    position: relative;
+    padding-left: 2.5rem;
+    margin-bottom: 0.8rem;
+  }
+  .passos-lista li::before {
+    content: counter(p);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1.8rem;
+    height: 1.8rem;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--petroleo-fundo);
+    color: var(--petroleo);
+    font-weight: 650;
+    font-size: 0.9rem;
+  }
+  .painel {
+    background: var(--areia);
+    border: 1px solid var(--borda);
+    border-radius: var(--raio);
+    padding: 1.6rem;
+    position: sticky;
+    top: 96px;
+  }
+  .painel h2 {
+    font-family: var(--fonte-corpo);
+    font-size: 0.76rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dourado);
+    margin-bottom: 1rem;
+  }
+  .painel dl {
+    margin: 0 0 1.4rem;
+    display: grid;
+    gap: 0.7rem;
+  }
+  .painel dl div {
+    display: grid;
+    gap: 0.1rem;
+    padding-bottom: 0.7rem;
+    border-bottom: 1px solid var(--borda);
+  }
+  .painel dl div:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+  .painel dt {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--tinta-suave);
+  }
+  .painel dd {
+    margin: 0;
+    font-weight: 600;
+    font-size: 0.96rem;
+  }
+  .painel__btn {
+    width: 100%;
+  }
+  .disclaimer {
+    margin-top: 2rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--borda);
+  }
+</style>

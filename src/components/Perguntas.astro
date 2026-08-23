@@ -1,0 +1,79 @@
+---
+import type { Faq } from '../data/tipos';
+
+export interface Props {
+  perguntas: Faq[];
+  titulo?: string;
+  nivel?: 2 | 3;
+}
+const { perguntas, titulo = 'Perguntas frequentes', nivel = 2 } = Astro.props;
+const Titulo = `h${nivel}` as 'h2' | 'h3';
+---
+
+<section class="faq">
+  <Titulo class="faq__titulo">{titulo}</Titulo>
+  <div class="faq__lista">
+    {
+      perguntas.map((p) => (
+        <details class="faq__item">
+          <summary>{p.pergunta}</summary>
+          <div class="faq__resposta">
+            <p>{p.resposta}</p>
+          </div>
+        </details>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .faq__titulo {
+    margin-bottom: 1.25rem;
+  }
+  .faq__lista {
+    display: grid;
+    gap: 0.6rem;
+  }
+  .faq__item {
+    background: var(--papel);
+    border: 1px solid var(--borda);
+    border-radius: var(--raio-p);
+    overflow: hidden;
+  }
+  .faq__item[open] {
+    border-color: var(--borda-forte);
+  }
+  summary {
+    cursor: pointer;
+    list-style: none;
+    padding: 1rem 3rem 1rem 1.25rem;
+    font-weight: 600;
+    position: relative;
+    font-size: 1.02rem;
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  summary::after {
+    content: '+';
+    position: absolute;
+    right: 1.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--dourado);
+    line-height: 1;
+  }
+  .faq__item[open] summary::after {
+    content: '–';
+  }
+  .faq__resposta {
+    padding: 0 1.25rem 1.15rem;
+    color: var(--tinta-suave);
+  }
+  .faq__resposta p {
+    margin: 0;
+    max-width: 72ch;
+  }
+</style>

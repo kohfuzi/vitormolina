@@ -1,0 +1,233 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ChamadaFinal from '../../components/ChamadaFinal.astro';
+import LinksRelacionados from '../../components/LinksRelacionados.astro';
+import Migalhas from '../../components/Migalhas.astro';
+import Perguntas from '../../components/Perguntas.astro';
+import Secoes from '../../components/Secoes.astro';
+import TabelaFatos from '../../components/TabelaFatos.astro';
+import { ARTIGOS, getArtigo, urlArtigo } from '../../data/artigos';
+import { AVISO_ETICO, DENTISTA, PENDENTE, whatsappHref } from '../../data/site';
+import type { Artigo } from '../../data/tipos';
+import { getTratamento, urlTratamento } from '../../data/tratamentos';
+import {
+  artigoSchema,
+  consultorioSchema,
+  faqSchema,
+  grafo,
+  migalhasSchema,
+  paginaSchema,
+  pessoaSchema,
+  siteSchema,
+} from '../../lib/schema';
+import { dataIso, dataLegivel, urlAbsoluta } from '../../lib/seo';
+
+export function getStaticPaths() {
+  return ARTIGOS.map((a) => ({ params: { slug: a.slug }, props: { artigo: a } }));
+}
+
+interface Props {
+  artigo: Artigo;
+}
+
+const { artigo: a } = Astro.props;
+
+const caminho = urlArtigo(a.slug);
+const url = urlAbsoluta(caminho);
+
+const migalhas = [
+  { nome: 'Início', url: '/' },
+  { nome: 'Artigos', url: '/artigos/' },
+  { nome: a.categoria, url: caminho },
+];
+
+const tratamentos = a.tratamentosRelacionados
+  .map((slug) => getTratamento(slug))
+  .filter((t) => Boolean(t));
+
+const outros = a.artigosRelacionados
+  .map((slug) => getArtigo(slug))
+  .filter((x): x is Artigo => Boolean(x));
+
+const links = [
+  ...tratamentos.map((t) => ({
+    titulo: t!.h1,
+    descricao: t!.resumo,
+    url: urlTratamento(t!.slug),
+  })),
+  ...outros.map((o) => ({ titulo: o.titulo, descricao: o.resumo, url: urlArtigo(o.slug) })),
+];
+
+const schema = grafo(
+  consultorioSchema(),
+  pessoaSchema(),
+  siteSchema(),
+  paginaSchema({ url, titulo: a.tituloSeo, descricao: a.metaDescricao, tipo: 'MedicalWebPage' }),
+  migalhasSchema(migalhas),
+  artigoSchema(a, url),
+  faqSchema(a.faq)
+);
+---
+
+<BaseLayout
+  titulo={a.tituloSeo}
+  descricao={a.metaDescricao}
+  caminho={caminho}
+  tipoOg="article"
+  schema={schema}
+  publicadoEm={dataIso(a.publicadoEm)}
+  atualizadoEm={dataIso(a.atualizadoEm)}
+>
+  <Migalhas itens={migalhas} />
+
+  <article>
+    <header class="topo">
+      <div class="container topo__interno">
+        <p class="olho">{a.categoria} · {a.tempoLeitura} min de leitura</p>
+        <h1>{a.titulo}</h1>
+        <p class="topo__resposta">{a.respostaDireta}</p>
+        <p class="topo__assinatura">
+          Por <a href="/sobre/">{DENTISTA.nome}</a>{!PENDENTE.cro && <>, {DENTISTA.cro}</>} ·
+          <time datetime={a.publicadoEm}>Publicado em {dataLegivel(a.publicadoEm)}</time>
+          {a.atualizadoEm !== a.publicadoEm && (
+            <>
+              {' '}· <time datetime={a.atualizadoEm}>atualizado em {dataLegivel(a.atualizadoEm)}</time>
+            </>
+          )}
+        </p>
+      </div>
+    </header>
+
+    <div class="secao secao--papel">
+      <div class="container artigo">
+        <div class="prosa">
+          <TabelaFatos fatos={a.fatos} titulo="Em resumo" />
+
+          <nav class="indice" aria-label="Índice do artigo">
+            <h2>Neste artigo</h2>
+            <ol>
+              {a.secoes.map((s) => (
+                <li><a href={`#${s.id}`}>{s.titulo}</a></li>
+              ))}
+              <li><a href="#perguntas">Perguntas frequentes</a></li>
+            </ol>
+          </nav>
+
+          <Secoes secoes={a.secoes} />
+
+          <div id="perguntas">
+            <Perguntas perguntas={a.faq} titulo="Perguntas frequentes" />
+          </div>
+
+          <aside class="autor">
+            <img src="/logo.jpg" alt="" width="56" height="56" />
+            <div>
+              <strong>{DENTISTA.nome}</strong>
+              <span>
+                {DENTISTA.cargo} em Sorocaba (SP){!PENDENTE.cro && <> · {DENTISTA.cro}</>}. Atende
+                particular e Porto Seguro, do diagnóstico ao acompanhamento.
+              </span>
+              <a class="btn btn--principal btn--autor" href={whatsappHref} rel="noopener">
+                Agendar avaliação
+              </a>
+            </div>
+          </aside>
+
+          <p class="aviso disclaimer">{AVISO_ETICO}</p>
+
+          <LinksRelacionados links={links} titulo="Leia também" />
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <ChamadaFinal />
+</BaseLayout>
+
+<style>
+  .topo {
+    background: linear-gradient(180deg, var(--papel) 0%, var(--areia) 100%);
+    padding: clamp(2.25rem, 5vw, 3.5rem) 0;
+  }
+  .topo__interno {
+    max-width: 74ch;
+  }
+  .topo h1 {
+    max-width: 24ch;
+  }
+  .topo__resposta {
+    font-size: 1.12rem;
+    color: var(--tinta-suave);
+  }
+  .topo__assinatura {
+    font-size: 0.88rem;
+    color: var(--tinta-suave);
+    margin: 1.5rem 0 0;
+  }
+
+  .indice {
+    background: var(--areia);
+    border-radius: var(--raio-p);
+    padding: 1.2rem 1.4rem;
+    margin-bottom: 2.5rem;
+  }
+  .indice h2 {
+    font-family: var(--fonte-corpo);
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--tinta-suave);
+    margin-bottom: 0.75rem;
+  }
+  .indice ol {
+    margin: 0;
+    padding-left: 1.2rem;
+  }
+  .indice li {
+    margin-bottom: 0.35rem;
+  }
+  .indice a {
+    text-decoration: none;
+  }
+  .indice a:hover {
+    text-decoration: underline;
+  }
+
+  .autor {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    background: var(--petroleo-fundo);
+    border-radius: var(--raio);
+    padding: 1.4rem;
+    margin: 2.5rem 0 0;
+  }
+  .autor img {
+    border-radius: 10px;
+    flex-shrink: 0;
+  }
+  .autor div {
+    display: grid;
+    gap: 0.3rem;
+  }
+  .autor strong {
+    font-family: var(--fonte-display);
+    font-size: 1.1rem;
+  }
+  .autor span {
+    font-size: 0.93rem;
+    color: var(--tinta-suave);
+  }
+  .btn--autor {
+    justify-self: start;
+    margin-top: 0.6rem;
+    padding: 0.6rem 1.15rem;
+    font-size: 0.92rem;
+  }
+
+  .disclaimer {
+    margin-top: 2rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--borda);
+  }
+</style>

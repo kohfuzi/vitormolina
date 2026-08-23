@@ -1,0 +1,88 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ChamadaFinal from '../../components/ChamadaFinal.astro';
+import Migalhas from '../../components/Migalhas.astro';
+import Perguntas from '../../components/Perguntas.astro';
+import { FAQ_GRUPOS, TODAS_AS_FAQS } from '../../data/faq';
+import { AVISO_ETICO } from '../../data/site';
+import {
+  consultorioSchema,
+  faqSchema,
+  grafo,
+  migalhasSchema,
+  paginaSchema,
+  pessoaSchema,
+  siteSchema,
+} from '../../lib/schema';
+import { urlAbsoluta } from '../../lib/seo';
+
+const caminho = '/perguntas-frequentes/';
+const url = urlAbsoluta(caminho);
+const titulo = 'Perguntas frequentes';
+const descricao =
+  'Convênio, primeira consulta, idade mínima das crianças, horário de sábado, harmonização facial e estacionamento: as respostas do consultório do Dr. Vitor Molina em Sorocaba.';
+
+const migalhas = [
+  { nome: 'Início', url: '/' },
+  { nome: 'Perguntas frequentes', url: caminho },
+];
+
+const schema = grafo(
+  consultorioSchema(),
+  pessoaSchema(),
+  siteSchema(),
+  paginaSchema({ url, titulo, descricao, tipo: 'FAQPage' }),
+  migalhasSchema(migalhas),
+  faqSchema(TODAS_AS_FAQS)
+);
+---
+
+<BaseLayout titulo={titulo} descricao={descricao} caminho={caminho} schema={schema}>
+  <Migalhas itens={migalhas} />
+
+  <header class="topo">
+    <div class="container">
+      <p class="olho">Dúvidas</p>
+      <h1>Perguntas frequentes</h1>
+      <p class="topo__lead">
+        As dúvidas que mais chegam por telefone e WhatsApp, respondidas do jeito que são respondidas
+        na recepção — direto, sem enrolação.
+      </p>
+    </div>
+  </header>
+
+  <div class="secao secao--papel">
+    <div class="container prosa">
+      {
+        FAQ_GRUPOS.map((grupo) => (
+          <section id={grupo.id} class="grupo">
+            <Perguntas perguntas={grupo.perguntas} titulo={grupo.titulo} />
+          </section>
+        ))
+      }
+      <p class="aviso disclaimer">{AVISO_ETICO}</p>
+    </div>
+  </div>
+
+  <ChamadaFinal />
+</BaseLayout>
+
+<style>
+  .topo {
+    background: linear-gradient(180deg, var(--papel) 0%, var(--areia) 100%);
+    padding: clamp(2.25rem, 5vw, 3.5rem) 0;
+  }
+  .topo__lead {
+    font-size: 1.1rem;
+    color: var(--tinta-suave);
+    max-width: 62ch;
+  }
+  .grupo {
+    margin-bottom: 3rem;
+    scroll-margin-top: 90px;
+  }
+  .disclaimer {
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--borda);
+  }
+</style>

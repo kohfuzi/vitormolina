@@ -1,0 +1,15 @@
+---
+import type { Tratamento } from '../data/tipos';
+import { urlTratamento } from '../data/tratamentos';
+
+export interface Props {
+  tratamento: Tratamento;
+}
+const { tratamento } = Astro.props;
+---
+
+<a class="cartao" href={urlTratamento(tratamento.slug)}>
+  <h3>{tratamento.titulo}</h3>
+  <p>{tratamento.resumo}</p>
+  <span class="cartao__link">Ver como funciona →</span>
+</a>

@@ -1,0 +1,182 @@
+---
+import { NAV, SITE, whatsappHref } from '../data/site';
+
+const caminhoAtual = Astro.url.pathname;
+const ativo = (href: string) =>
+  href === '/' ? caminhoAtual === '/' : caminhoAtual.startsWith(href);
+---
+
+<header class="cabecalho">
+  <div class="container cabecalho__interno">
+    <a href="/" class="marca" aria-label={`${SITE.nome} — início`}>
+      <img src="/logo.jpg" alt="" width="44" height="44" class="marca__logo" />
+      <span class="marca__texto">
+        <strong>Dr. Vitor Molina</strong>
+        <small>Odontologia · Sorocaba</small>
+      </span>
+    </a>
+
+    <a class="btn btn--principal cabecalho__cta" href={whatsappHref} rel="noopener">
+      <span class="cabecalho__cta-longo">Agendar avaliação</span>
+      <span class="cabecalho__cta-curto">Agendar</span>
+    </a>
+
+    <nav class="navegacao" aria-label="Menu principal">
+      <ul>
+        {
+          NAV.map((item) => (
+            <li>
+              <a href={item.href} aria-current={ativo(item.href) ? 'page' : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  /* Sem JavaScript: no celular o menu vira uma faixa rolável;
+     a partir de 940px ele fica na mesma linha da marca. */
+  .cabecalho {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: rgba(247, 244, 239, 0.97);
+    backdrop-filter: saturate(150%) blur(8px);
+    border-bottom: 1px solid var(--borda);
+  }
+
+  .cabecalho__interno {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1rem;
+    padding-top: 0.7rem;
+    padding-bottom: 0.35rem;
+  }
+
+  .marca {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    text-decoration: none;
+    color: var(--tinta);
+  }
+  .marca__logo {
+    border-radius: 10px;
+    object-fit: cover;
+    width: 40px;
+    height: 40px;
+  }
+  .marca__texto {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+  }
+  .marca__texto strong {
+    font-family: var(--fonte-display);
+    font-size: 1.02rem;
+    font-weight: 600;
+  }
+  .marca__texto small {
+    font-size: 0.76rem;
+    color: var(--tinta-suave);
+    letter-spacing: 0.02em;
+  }
+
+  .cabecalho__cta {
+    padding: 0.55rem 1rem;
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+  .cabecalho__cta-longo {
+    display: none;
+  }
+
+  .navegacao {
+    order: 3;
+    width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 -1.25rem;
+    padding: 0 1.25rem;
+  }
+  .navegacao::-webkit-scrollbar {
+    display: none;
+  }
+  .navegacao ul {
+    display: flex;
+    gap: 1.25rem;
+    list-style: none;
+    padding: 0 0 0.55rem;
+    margin: 0;
+    width: max-content;
+  }
+  .navegacao li {
+    margin: 0;
+  }
+  .navegacao a {
+    display: block;
+    text-decoration: none;
+    font-weight: 550;
+    font-size: 0.95rem;
+    color: var(--tinta-suave);
+    white-space: nowrap;
+    position: relative;
+    padding: 0.2rem 0;
+  }
+  .navegacao a:hover {
+    color: var(--petroleo);
+  }
+  .navegacao a[aria-current='page'] {
+    color: var(--petroleo);
+  }
+  .navegacao a[aria-current='page']::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.15rem;
+    height: 2px;
+    background: var(--dourado);
+    border-radius: 2px;
+  }
+
+  @media (min-width: 940px) {
+    .cabecalho__interno {
+      flex-wrap: nowrap;
+      min-height: 76px;
+      padding-top: 0;
+      padding-bottom: 0;
+      gap: 2rem;
+    }
+    .navegacao {
+      order: 2;
+      width: auto;
+      overflow: visible;
+      margin: 0;
+      padding: 0;
+      margin-left: auto;
+    }
+    .navegacao ul {
+      padding: 0;
+      gap: 1.6rem;
+    }
+    .cabecalho__cta {
+      order: 3;
+      padding: 0.65rem 1.2rem;
+      font-size: 0.94rem;
+    }
+    .cabecalho__cta-longo {
+      display: inline;
+    }
+    .cabecalho__cta-curto {
+      display: none;
+    }
+  }
+</style>
