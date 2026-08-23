@@ -20,7 +20,7 @@ const ano = new Date().getFullYear();
 <footer class="rodape">
   <div class="container rodape__grade">
     <div class="rodape__bloco">
-      <img src="/logo.jpg" alt={SITE.nome} width="56" height="56" class="rodape__logo" />
+      <img src="/logo-reverso.svg" alt={SITE.nome} width="52" height="52" class="rodape__logo" />
       <p class="rodape__resumo">
         Consultório odontológico em {NAP.cidade}, {NAP.estado}. Atendimento particular e {
           ATENDIMENTO.convenios.join(', ')
@@ -126,11 +126,9 @@ const ano = new Date().getFullYear();
     }
   }
   .rodape__logo {
-    border-radius: 10px;
     margin-bottom: 1rem;
-    width: 56px;
-    height: 56px;
-    object-fit: cover;
+    width: 52px;
+    height: 52px;
   }
   .rodape h2 {
     font-family: var(--fonte-corpo);

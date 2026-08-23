@@ -9,7 +9,7 @@ const ativo = (href: string) =>
 <header class="cabecalho">
   <div class="container cabecalho__interno">
     <a href="/" class="marca" aria-label={`${SITE.nome} — início`}>
-      <img src="/logo.jpg" alt="" width="44" height="44" class="marca__logo" />
+      <img src="/logo.svg" alt="" width="40" height="40" class="marca__logo" />
       <span class="marca__texto">
         <strong>Dr. Vitor Molina</strong>
         <small>Odontologia · Sorocaba</small>
@@ -67,8 +67,6 @@ const ativo = (href: string) =>
     color: var(--tinta);
   }
   .marca__logo {
-    border-radius: 10px;
-    object-fit: cover;
     width: 40px;
     height: 40px;
   }

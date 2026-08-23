@@ -68,11 +68,32 @@ como `sameAs` no Schema.org, aparecem no rodapé e na página de contato, e est�
 > das causas mais comuns de perda de posição na busca local. O perfil do Google está como
 > *"Dr. Vitor Simon Molina | Dentista Campolim"* — esse nome entra no schema como `alternateName`.
 
-### Logo
+### Marca
 
-`public/logo.jpg` é o arquivo apontado na criação do projeto (150×150, vindo da pasta
-`dentalrecover`). Para trocar: substitua o arquivo mantendo o nome e rode `npm run imagens`
-para regerar a imagem de compartilhamento e os ícones.
+A logomarca é vetorial e vive em dois arquivos editáveis:
+
+- `public/logo.svg` — marca sobre fundo claro (dente branco e arco dourado dentro de um quadrado
+  petróleo). Usada no cabeçalho, no favicon e como base dos ícones.
+- `public/logo-reverso.svg` — a mesma marca sem o quadrado, para fundo escuro (rodapé e og.png).
+
+Tudo o mais é derivado: `npm run imagens` regera `logo.png` (512px, o raster que o Schema.org
+pede), `apple-touch-icon.png`, `icone-192.png`, `icone-512.png` e `og.png`. Ao mexer no SVG,
+rode o comando de novo.
+
+### Foto do profissional
+
+O original fica em `foto-dr-vitor-molina.jpg`, na raiz (fora de `public/`), com ~530px. Como a
+resolução é baixa, o site nunca amplia a imagem: `npm run imagens` produz duas versões e o CSS
+limita o tamanho de exibição.
+
+- `public/dr-vitor-molina.jpg` (520px) — retrato em tamanho médio, exibido com no máximo 260px
+  na home e em `/sobre/`
+- `public/dr-vitor-molina-avatar.jpg` (200px) — recorte fechado no rosto, para o círculo de 72px
+  na caixa do autor dos artigos
+
+Ao trocar a foto por uma de maior resolução, substitua o original e rode `npm run imagens`. Se o
+enquadramento mudar, ajuste o `extract({ left, top, width, height })` do avatar em
+`scripts/gerar-imagens.mjs`.
 
 ---
 
@@ -99,7 +120,7 @@ src/
     BaseLayout.astro   <head> completo: canonical, OG, hreflang, JSON-LD
   pages/             rotas do site
   styles/global.css  CSS único, sem framework
-public/              logo, ícones, og.png, manifest
+public/              marca (SVG), ícones, og.png, retratos, manifest
 scripts/
   gerar-imagens.mjs  gera og.png e ícones
   auditar.mjs        auditoria de SEO do dist/

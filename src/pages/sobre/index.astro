@@ -94,7 +94,21 @@ const principios = [
   </header>
 
   <section class="secao secao--papel">
-    <div class="container prosa">
+    <div class="container perfil">
+      <figure class="retrato">
+        <img
+          src={DENTISTA.foto}
+          alt={`${DENTISTA.nome}, cirurgião-dentista em Sorocaba`}
+          width="520"
+          height="520"
+          loading="lazy"
+        />
+        <figcaption>
+          {DENTISTA.nome}{!PENDENTE.cro && <> — {DENTISTA.cro}</>}
+          <span>{DENTISTA.cargo}</span>
+        </figcaption>
+      </figure>
+      <div class="prosa">
       <h2>Como o tratamento é montado</h2>
       <p>
         Cada plano é montado para o caso, e não a partir de um pacote pronto. Você sabe o que tem,
@@ -109,6 +123,7 @@ const principios = [
         exame na mão e o plano de tratamento sai com etapas, prazos e valores. O que é urgente é
         sinalizado como urgente; o que pode esperar, também.
       </p>
+      </div>
     </div>
   </section>
 
@@ -208,6 +223,41 @@ const principios = [
     margin: 0;
     font-weight: 600;
     font-size: 0.97rem;
+  }
+  .perfil {
+    display: grid;
+    gap: 2rem;
+    align-items: start;
+  }
+  @media (min-width: 860px) {
+    .perfil {
+      grid-template-columns: 260px 1fr;
+      gap: 3.5rem;
+    }
+  }
+  .retrato {
+    margin: 0;
+    max-width: 260px;
+  }
+  .retrato img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: var(--raio);
+    border: 1px solid var(--borda);
+  }
+  .retrato figcaption {
+    margin-top: 0.85rem;
+    font-weight: 620;
+    font-size: 0.95rem;
+    display: grid;
+    gap: 0.1rem;
+  }
+  .retrato figcaption span {
+    font-weight: 400;
+    font-size: 0.88rem;
+    color: var(--tinta-suave);
   }
   .principios {
     margin-top: 1.5rem;

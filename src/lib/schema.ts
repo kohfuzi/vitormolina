@@ -60,6 +60,7 @@ export function pessoaSchema() {
     jobTitle: DENTISTA.cargo,
     description: DENTISTA.bio,
     url: urlAbsoluta('/sobre/'),
+    image: urlAbsoluta(DENTISTA.foto),
     ...(PENDENTE.cro
       ? {}
       : {
@@ -93,8 +94,8 @@ export function consultorioSchema() {
     alternateName: [SITE.nome, DENTISTA.nomeGoogle],
     description: SITE.descricao,
     url: SITE.url,
-    image: urlAbsoluta('/logo.jpg'),
-    logo: urlAbsoluta('/logo.jpg'),
+    image: urlAbsoluta('/logo.png'),
+    logo: urlAbsoluta('/logo.png'),
     ...(PENDENTE.telefone ? {} : { telephone: NAP.telefoneLink }),
     ...(NAP.email ? { email: NAP.email } : {}),
     address: PENDENTE.endereco
@@ -249,7 +250,7 @@ export function artigoSchema(a: Artigo, url: string) {
     keywords: [a.keyword, ...a.keywordsSecundarias].join(', '),
     about: { '@id': ID_CONSULTORIO },
     wordCount: contarPalavras(a),
-    image: urlAbsoluta('/logo.jpg'),
+    image: urlAbsoluta('/og.png'),
     isAccessibleForFree: true,
   };
 }

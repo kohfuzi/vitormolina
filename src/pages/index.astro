@@ -9,7 +9,7 @@ import { artigosOrdenados } from '../data/artigos';
 import { FAQ_HOME } from '../data/faq';
 import { GEO_HOME } from '../data/geo';
 import { PAGINAS_FOCO } from '../data/paginas-foco';
-import { ATENDIMENTO, HORARIO, SITE, whatsappHref } from '../data/site';
+import { ATENDIMENTO, DENTISTA, HORARIO, SITE, whatsappHref } from '../data/site';
 import { CATEGORIAS, TRATAMENTOS, tratamentosPorCategoria } from '../data/tratamentos';
 import {
   consultorioSchema,
@@ -101,6 +101,15 @@ const provas = [
       <div>
         <p class="olho">Sobre o consultório</p>
         <h2>Aqui quem atende é o Dr. Vitor Molina</h2>
+        <figure class="retrato">
+          <img
+            src={DENTISTA.foto}
+            alt={`${DENTISTA.nome}, cirurgião-dentista em Sorocaba`}
+            width="520"
+            height="520"
+            loading="lazy"
+          />
+        </figure>
       </div>
       <div class="prosa">
         <p>
@@ -339,6 +348,19 @@ const provas = [
       grid-template-columns: 1fr 1.4fr;
       gap: 4rem;
     }
+  }
+
+  .retrato {
+    margin: 1.5rem 0 0;
+    max-width: 240px;
+  }
+  .retrato img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: var(--raio);
+    border: 1px solid var(--borda);
   }
 
   .categoria {

@@ -67,6 +67,8 @@ export const DENTISTA = {
     'Harmonização facial',
     'Odontologia geral e restauradora',
   ],
+  foto: '/dr-vitor-molina.jpg', // retrato médio (520px) — /sobre/ e home
+  avatar: '/dr-vitor-molina-avatar.jpg', // recorte no rosto (200px) — caixa do autor
   bio: 'O Dr. Vitor Molina é cirurgião-dentista em Sorocaba (SP) e atende pessoalmente todas as etapas do tratamento — diagnóstico, planejamento, execução e acompanhamento. O consultório trabalha com atendimento particular e com o convênio Porto Seguro.',
 } as const;
 
