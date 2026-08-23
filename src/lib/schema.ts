@@ -5,6 +5,7 @@ import {
   HORARIO,
   NAP,
   PENDENTE,
+  PERFIS,
   RESUMO_FACTUAL,
   SITE,
 } from '../data/site';
@@ -38,7 +39,7 @@ const sabadoSchema = {
   closes: HORARIO.sabado.fecha,
 };
 
-const redesSociais = [NAP.instagram, NAP.gbpUrl].filter(Boolean);
+const redesSociais = PERFIS.map((perfil) => perfil.url);
 
 const areaAtendida = AREA_ATENDIDA.map((cidade) => ({
   '@type': 'City',
@@ -53,7 +54,9 @@ export function pessoaSchema() {
     '@id': ID_DENTISTA,
     name: DENTISTA.nome,
     givenName: DENTISTA.primeiroNome,
+    additionalName: DENTISTA.nomeDoMeio,
     familyName: DENTISTA.sobrenome,
+    alternateName: DENTISTA.nomeCompleto,
     jobTitle: DENTISTA.cargo,
     description: DENTISTA.bio,
     url: urlAbsoluta('/sobre/'),
@@ -87,12 +90,13 @@ export function consultorioSchema() {
     '@type': 'Dentist',
     '@id': ID_CONSULTORIO,
     name: NAP.nome,
-    alternateName: SITE.nome,
+    alternateName: [SITE.nome, DENTISTA.nomeGoogle],
     description: SITE.descricao,
     url: SITE.url,
     image: urlAbsoluta('/logo.jpg'),
     logo: urlAbsoluta('/logo.jpg'),
-    ...(PENDENTE.telefone ? {} : { telephone: NAP.telefoneLink, email: NAP.email }),
+    ...(PENDENTE.telefone ? {} : { telephone: NAP.telefoneLink }),
+    ...(NAP.email ? { email: NAP.email } : {}),
     address: PENDENTE.endereco
       ? {
           '@type': 'PostalAddress',
@@ -108,7 +112,7 @@ export function consultorioSchema() {
           postalCode: NAP.cep,
           addressCountry: NAP.pais,
         },
-    ...(PENDENTE.geo
+    ...(PENDENTE.geo || !NAP.latitude
       ? {}
       : {
           geo: {
@@ -116,8 +120,8 @@ export function consultorioSchema() {
             latitude: NAP.latitude,
             longitude: NAP.longitude,
           },
-          hasMap: NAP.mapsUrl || undefined,
         }),
+    ...(NAP.mapsUrl ? { hasMap: NAP.mapsUrl } : {}),
     openingHoursSpecification: [semanaSchema, sabadoSchema],
     areaServed: areaAtendida,
     availableLanguage: { '@type': 'Language', name: 'Portuguese', alternateName: 'pt-BR' },

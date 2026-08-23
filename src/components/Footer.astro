@@ -4,12 +4,11 @@ import {
   AREA_ATENDIDA,
   AVISO_ETICO,
   DENTISTA,
-  HORARIO,
   NAP,
   NAV,
   PENDENTE,
+  PERFIS,
   SITE,
-  enderecoLinha,
   telHref,
   whatsappHref,
 } from '../data/site';
@@ -28,17 +27,37 @@ const ano = new Date().getFullYear();
         }, com o mesmo profissional do diagnóstico ao acompanhamento.
       </p>
       <address class="rodape__nap">
-        <span>{enderecoLinha}</span>
         {
-          !PENDENTE.telefone && (
-            <>
-              <a href={telHref}>{NAP.telefone}</a>
-              <a href={`mailto:${NAP.email}`}>{NAP.email}</a>
-            </>
+          PENDENTE.endereco ? (
+            <span>
+              {NAP.cidade} — {NAP.estado}
+            </span>
+          ) : (
+            <span class="rodape__endereco">
+              {NAP.edificio}
+              <br />
+              {NAP.rua}, {NAP.complemento}
+              <br />
+              {NAP.bairro} · {NAP.cidade}/{NAP.estado} · {NAP.cep}
+            </span>
           )
         }
+        {!PENDENTE.telefone && <a href={telHref}>{NAP.telefone}</a>}
+        {NAP.email && <a href={`mailto:${NAP.email}`}>{NAP.email}</a>}
         <a href={whatsappHref} rel="noopener">Agendar pelo WhatsApp</a>
       </address>
+
+      <ul class="rodape__perfis">
+        {
+          PERFIS.map((perfil) => (
+            <li>
+              <a href={perfil.url} rel="noopener me">
+                {perfil.nome === 'Perfil da Empresa no Google' ? 'Google' : perfil.nome}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
     </div>
 
     <div class="rodape__bloco">
@@ -84,9 +103,7 @@ const ano = new Date().getFullYear();
   <div class="container rodape__base">
     <p class="aviso">{AVISO_ETICO}</p>
     <p class="aviso">
-      © {ano} {DENTISTA.nome}
-      {!PENDENTE.cro && <> — {DENTISTA.cro}</>}. Todos os direitos reservados.
-      {HORARIO.resumo}.
+      {`© ${ano} ${DENTISTA.nome}${PENDENTE.cro ? '' : ` — ${DENTISTA.cro}`}. Todos os direitos reservados.`}
     </p>
   </div>
 </footer>
@@ -151,6 +168,31 @@ const ano = new Date().getFullYear();
     display: flex;
     flex-direction: column;
     gap: 0.35rem;
+  }
+  .rodape__perfis {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+  .rodape__perfis li {
+    margin: 0;
+  }
+  .rodape__perfis a {
+    display: inline-block;
+    padding: 0.28rem 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 999px;
+    font-size: 0.84rem;
+  }
+  .rodape__perfis a:hover {
+    border-color: #fff;
+    text-decoration: none;
+  }
+  .rodape__endereco {
+    color: #b9cfc9;
+    line-height: 1.5;
+    margin-bottom: 0.35rem;
   }
   .rodape__horario li,
   .rodape__regiao {

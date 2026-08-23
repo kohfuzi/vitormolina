@@ -9,7 +9,7 @@ import {
   HORARIO,
   NAP,
   PENDENTE,
-  enderecoLinha,
+  PERFIS,
   telHref,
   whatsappHref,
 } from '../../data/site';
@@ -79,23 +79,54 @@ const passos = [
         </ol>
 
         <h2>Onde fica</h2>
+        {
+          PENDENTE.endereco ? (
+            <p>
+              O consultório fica em {NAP.cidade}, {NAP.estadoExtenso}. O endereço completo e o ponto
+              de referência são enviados junto com a confirmação do horário. {ATENDIMENTO.estacionamento}
+            </p>
+          ) : (
+            <>
+              <address class="endereco">
+                <strong>{NAP.edificio}</strong>
+                <span>{NAP.rua} · {NAP.complemento}</span>
+                <span>{NAP.bairro} — {NAP.cidade}/{NAP.estado}</span>
+                <span>CEP {NAP.cep}</span>
+              </address>
+              <p>
+                O consultório fica no {NAP.edificio}, no {NAP.bairro}, em {NAP.cidade}.
+                {' '}{ATENDIMENTO.estacionamento}
+              </p>
+              {NAP.mapsUrl && (
+                <p class="botoes">
+                  <a class="btn btn--contorno" href={NAP.mapsUrl} rel="noopener">
+                    Abrir no Google Maps
+                  </a>
+                  <a class="btn btn--contorno" href={telHref}>
+                    Ligar para {NAP.telefone}
+                  </a>
+                </p>
+              )}
+            </>
+          )
+        }
+
+        <h2>Perfis oficiais</h2>
         <p>
-          O consultório fica em {NAP.cidade}, {NAP.estadoExtenso}.
-          {
-            PENDENTE.endereco ? (
-              <>
-                {' '}O endereço completo e o ponto de referência são enviados junto com a confirmação
-                do horário.
-              </>
-            ) : (
-              <> {enderecoLinha}.</>
-            )
-          }
-          {' '}{ATENDIMENTO.estacionamento}
+          Estes são os canais oficiais do Dr. Vitor Molina. Qualquer outro perfil que use o nome do
+          consultório não é mantido por ele.
         </p>
-        {!PENDENTE.geo && NAP.mapsUrl && (
-          <p><a class="btn btn--contorno" href={NAP.mapsUrl} rel="noopener">Abrir no Google Maps</a></p>
-        )}
+        <ul class="perfis">
+          {
+            PERFIS.map((perfil) => (
+              <li>
+                <a href={perfil.url} rel="noopener me">
+                  {perfil.nome}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
 
         <Perguntas perguntas={FAQ_CONSULTORIO} titulo="Antes de agendar" />
         <p class="aviso disclaimer">{AVISO_ETICO}</p>
@@ -110,9 +141,18 @@ const passos = [
           <div><dt>Crianças</dt><dd>A partir dos {ATENDIMENTO.idadeMinimaCriancas} anos</dd></div>
           <div><dt>Estacionamento</dt><dd>{ATENDIMENTO.estacionamento}</dd></div>
           {!PENDENTE.telefone && (
-            <div><dt>Telefone</dt><dd><a href={telHref}>{NAP.telefone}</a></dd></div>
+            <div>
+              <dt>Telefone e WhatsApp</dt>
+              <dd><a href={telHref}>{NAP.telefone}</a></dd>
+            </div>
           )}
-          {!PENDENTE.telefone && (
+          {!PENDENTE.endereco && (
+            <div>
+              <dt>Endereço</dt>
+              <dd>{NAP.edificio} · {NAP.rua}, {NAP.complemento} — {NAP.bairro}</dd>
+            </div>
+          )}
+          {NAP.email && (
             <div><dt>E-mail</dt><dd><a href={`mailto:${NAP.email}`}>{NAP.email}</a></dd></div>
           )}
         </dl>
@@ -144,6 +184,49 @@ const passos = [
       grid-template-columns: 1.5fr 1fr;
       gap: 4rem;
     }
+  }
+  .perfis {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin: 0 0 2.5rem;
+  }
+  .perfis li {
+    margin: 0;
+  }
+  .perfis a {
+    display: inline-block;
+    padding: 0.4rem 0.95rem;
+    border: 1px solid var(--borda-forte);
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 550;
+    text-decoration: none;
+  }
+  .perfis a:hover {
+    border-color: var(--petroleo);
+  }
+  .endereco {
+    font-style: normal;
+    display: grid;
+    gap: 0.15rem;
+    background: var(--papel);
+    border: 1px solid var(--borda);
+    border-left: 3px solid var(--dourado);
+    border-radius: var(--raio-p);
+    padding: 1.1rem 1.3rem;
+    margin: 0 0 1.25rem;
+  }
+  .endereco strong {
+    font-family: var(--fonte-display);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+  }
+  .endereco span {
+    color: var(--tinta-suave);
   }
   .passos-lista {
     counter-reset: p;

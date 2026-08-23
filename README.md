@@ -26,14 +26,19 @@ enquanto um item estiver `true`, o dado correspondente **não é publicado nos d
 (Schema.org) nem no `llms.txt`. Isso é proposital — informação inventada em dados estruturados
 prejudica o ranqueamento e é infração ética.
 
-| Preencher | Onde | Depois disso |
+| Item | Onde | Situação |
 |---|---|---|
-| Domínio final | `SITE.url` | trocar `PENDENTE.dominio` para `false` |
-| Rua, número, complemento, bairro e CEP | `NAP` | `PENDENTE.endereco = false` |
-| Telefone fixo, WhatsApp e e-mail | `NAP.telefone`, `NAP.telefoneLink`, `NAP.whatsapp`, `NAP.email` | `PENDENTE.telefone = false` |
-| Latitude/longitude e link do Google Maps | `NAP.latitude`, `NAP.longitude`, `NAP.mapsUrl` | `PENDENTE.geo = false` |
-| **CRO-SP do Dr. Vitor Molina** | `DENTISTA.cro` e `DENTISTA.croNumero` | `PENDENTE.cro = false` |
-| Instagram e Perfil da Empresa no Google | `NAP.instagram`, `NAP.gbpUrl` | `PENDENTE.redes = false` |
+| Endereço completo (Infinity Campolim Office) | `NAP` | ✔ preenchido |
+| Telefone e WhatsApp — (15) 3021-0460 | `NAP.telefone`, `NAP.telefoneLink`, `NAP.whatsapp` | ✔ preenchido |
+| Google, Instagram e Doctoralia | `NAP.gbpUrl`, `NAP.instagram`, `NAP.doctoralia` | ✔ preenchido |
+| **CRO-SP do Dr. Vitor Molina** | `DENTISTA.cro`, `DENTISTA.croNumero` | ✗ falta — depois, `PENDENTE.cro = false` |
+| Latitude/longitude exatas | `NAP.latitude`, `NAP.longitude` | ✗ falta — depois, `PENDENTE.geo = false` |
+| Domínio final | `SITE.url` | ✗ falta — depois, `PENDENTE.dominio = false` |
+| E-mail de contato (opcional) | `NAP.email` | vazio: nada é exibido nem publicado |
+
+**Coordenadas:** abra o Google Maps no ponto exato do prédio, clique com o botão direito e copie
+os números do primeiro item do menu (ex.: `-23.531035, -47.467157`). Cole em `NAP.latitude` e
+`NAP.longitude` e troque `PENDENTE.geo` para `false`.
 
 > O CRO é **obrigatório** em publicidade odontológica (Resolução CFO 196/2019). Enquanto
 > `PENDENTE.cro` for `true`, o número não aparece em lugar nenhum do site — nem no rodapé,
@@ -42,6 +47,26 @@ prejudica o ranqueamento e é infração ética.
 Se o Dr. Vitor tiver **especialidade registrada no CRO** (ex.: Implantodontia, Ortodontia,
 Harmonização Orofacial), inclua em `DENTISTA.especialidadesRegistradas`. Sem registro, o site
 trata o assunto como conteúdo informativo — nunca como especialidade anunciada.
+
+### NAP e perfis oficiais
+
+O endereço, o telefone e os perfis publicados são:
+
+```
+Infinity Campolim Office
+R. Octaviano Gozzano, 216 — Sala 95
+Parque Campolim, Sorocaba/SP — CEP 18048-100
+Telefone e WhatsApp: (15) 3021-0460
+```
+
+Os três perfis oficiais (Perfil da Empresa no Google, Instagram `@vsmolina` e Doctoralia) entram
+como `sameAs` no Schema.org, aparecem no rodapé e na página de contato, e estão listados no
+`llms.txt`. Para adicionar ou remover um perfil, edite a lista `PERFIS` em `src/data/site.ts`.
+
+> **NAP consistente:** o endereço, o telefone e o nome precisam estar escritos exatamente igual no
+> site, no Perfil da Empresa no Google, na Doctoralia e no Instagram. Divergência entre eles é uma
+> das causas mais comuns de perda de posição na busca local. O perfil do Google está como
+> *"Dr. Vitor Simon Molina | Dentista Campolim"* — esse nome entra no schema como `alternateName`.
 
 ### Logo
 

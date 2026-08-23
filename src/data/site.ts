@@ -15,11 +15,18 @@
 
 export const PENDENTE = {
   dominio: true, // ← confirmar domínio final e trocar SITE.url
-  endereco: true, // ← rua, número, complemento, bairro e CEP
-  telefone: true, // ← telefone fixo e/ou WhatsApp
-  geo: true, // ← latitude/longitude exatas do Google Maps
+  endereco: false, // ✔ preenchido
+  telefone: false, // ✔ preenchido
+  /**
+   * ← FALTA: latitude/longitude exatas do consultório.
+   * Como pegar: abra o Google Maps no ponto exato do prédio, clique com o
+   * botão direito e copie os números do primeiro item do menu. Cole em
+   * NAP.latitude / NAP.longitude e troque esta flag para false.
+   * Enquanto for true, nenhuma coordenada é publicada (melhor sem do que errada).
+   */
+  geo: true,
   cro: true, // ← CRO-SP do Dr. Vitor Molina (obrigatório por ética CFO)
-  redes: true, // ← Instagram / Google Business Profile
+  redes: false, // ✔ Google, Instagram e Doctoralia preenchidos
 } as const;
 
 export const SITE = {
@@ -36,9 +43,12 @@ export const SITE = {
 
 export const DENTISTA = {
   nome: 'Dr. Vitor Molina',
-  nomeCompleto: 'Vitor Molina',
+  nomeCompleto: 'Vitor Simon Molina',
   primeiroNome: 'Vitor',
+  nomeDoMeio: 'Simon',
   sobrenome: 'Molina',
+  /** Nome exato do Perfil da Empresa no Google — usado como alternateName no Schema.org. */
+  nomeGoogle: 'Dr. Vitor Simon Molina | Dentista Campolim',
   cargo: 'Cirurgião-dentista',
   cro: 'CRO-SP PREENCHER', // ← PREENCHER e trocar PENDENTE.cro para false
   croNumero: 'PREENCHER',
@@ -64,27 +74,29 @@ export const NAP = {
   // NAME
   nome: 'Dr. Vitor Molina — Odontologia',
   // ADDRESS
-  rua: 'PREENCHER — Rua e número',
-  complemento: 'PREENCHER — sala/andar',
-  bairro: 'PREENCHER — bairro',
+  edificio: 'Infinity Campolim Office',
+  rua: 'R. Octaviano Gozzano, 216',
+  complemento: 'Sala 95',
+  bairro: 'Parque Campolim',
   cidade: 'Sorocaba',
   estado: 'SP',
   estadoExtenso: 'São Paulo',
-  cep: 'PREENCHER — 00000-000',
+  cep: '18048-100',
   pais: 'BR',
-  // PHONE
-  telefone: '+55 15 0000-0000', // ← PREENCHER
-  telefoneLink: '+551500000000', // ← PREENCHER (somente dígitos, com +55)
-  whatsapp: '5515900000000', // ← PREENCHER (somente dígitos: 55 + DDD + número)
+  // PHONE — o fixo do consultório também é o WhatsApp
+  telefone: '(15) 3021-0460',
+  telefoneLink: '+551530210460',
+  whatsapp: '551530210460', // somente dígitos: 55 + DDD + número
   whatsappTexto:
     'Ol%C3%A1%2C%20Dr.%20Vitor!%20Vim%20pelo%20site%20e%20quero%20agendar%20a%20primeira%20avalia%C3%A7%C3%A3o.',
-  email: 'contato@vitormolina.com.br', // ← PREENCHER
-  // GEO (centro de Sorocaba como referência — trocar pela coordenada exata)
-  latitude: '-23.5015',
-  longitude: '-47.4526',
-  mapsUrl: '', // ← PREENCHER: link do Google Maps do consultório
-  gbpUrl: '', // ← PREENCHER: link do Perfil da Empresa no Google
-  instagram: '', // ← PREENCHER
+  email: '', // ← opcional: enquanto estiver vazio, nenhum e-mail é exibido nem publicado
+  // GEO — ver PENDENTE.geo acima antes de usar estes números
+  latitude: '',
+  longitude: '',
+  mapsUrl: 'https://share.google/xVr8ZOdcmU59u2DJM',
+  gbpUrl: 'https://share.google/xVr8ZOdcmU59u2DJM',
+  instagram: 'https://www.instagram.com/vsmolina/',
+  doctoralia: 'https://www.doctoralia.com.br/vitor-simon-molina/dentista/sorocaba',
 } as const;
 
 export const HORARIO = {
@@ -152,17 +164,29 @@ export const NAV = [
   { href: '/contato/', label: 'Contato' },
 ] as const;
 
+/** Perfis oficiais — alimentam `sameAs` no Schema.org e os links do rodapé. */
+export const PERFIS = [
+  { nome: 'Perfil da Empresa no Google', url: NAP.gbpUrl },
+  { nome: 'Instagram', url: NAP.instagram },
+  { nome: 'Doctoralia', url: NAP.doctoralia },
+].filter((perfil) => Boolean(perfil.url));
+
 export const whatsappHref = `https://wa.me/${NAP.whatsapp}?text=${NAP.whatsappTexto}`;
 export const telHref = `tel:${NAP.telefoneLink}`;
 
 export const enderecoLinha = PENDENTE.endereco
   ? `${NAP.cidade} — ${NAP.estado}`
-  : `${NAP.rua}${NAP.complemento ? ' · ' + NAP.complemento : ''} — ${NAP.bairro}, ${NAP.cidade}/${NAP.estado}`;
+  : `${NAP.rua}${NAP.complemento ? ', ' + NAP.complemento : ''} — ${NAP.bairro}, ${NAP.cidade}/${NAP.estado}`;
+
+/** Endereço completo em uma linha, com prédio e CEP. */
+export const enderecoCompleto = PENDENTE.endereco
+  ? `${NAP.cidade} — ${NAP.estado}`
+  : `${NAP.edificio} · ${NAP.rua}, ${NAP.complemento} — ${NAP.bairro}, ${NAP.cidade}/${NAP.estado}, ${NAP.cep}`;
 
 export const croLinha = PENDENTE.cro ? '' : `${DENTISTA.cro}`;
 
 /** Assinatura factual reaproveitada na home, no Schema.org e no llms.txt (GEO/AEO). */
-export const RESUMO_FACTUAL = `${DENTISTA.nome}${PENDENTE.cro ? ' é' : `, ${DENTISTA.cro}, é`} cirurgião-dentista em ${NAP.cidade}/${NAP.estado}. O consultório atende particular e ${ATENDIMENTO.convenios.join(', ')}, de segunda a sexta das 9h às 18h e aos sábados das 9h às 12h, a partir dos ${ATENDIMENTO.idadeMinimaCriancas} anos de idade. O mesmo profissional conduz o caso do diagnóstico ao acompanhamento e a primeira avaliação não tem custo.`;
+export const RESUMO_FACTUAL = `${DENTISTA.nome}${PENDENTE.cro ? ' é' : `, ${DENTISTA.cro}, é`} cirurgião-dentista em ${NAP.cidade}/${NAP.estado}, com consultório no ${NAP.edificio}, ${NAP.rua}, ${NAP.complemento}, ${NAP.bairro}. O consultório atende particular e ${ATENDIMENTO.convenios.join(', ')}, de segunda a sexta das 9h às 18h e aos sábados das 9h às 12h, a partir dos ${ATENDIMENTO.idadeMinimaCriancas} anos de idade. O mesmo profissional conduz o caso do diagnóstico ao acompanhamento e a primeira avaliação não tem custo.`;
 
 /** Aviso ético exigido pelo Código de Ética Odontológica (conteúdo educativo). */
 export const AVISO_ETICO =

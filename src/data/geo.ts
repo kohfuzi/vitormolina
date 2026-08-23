@@ -27,11 +27,11 @@ export const GEO_QUEM: BlocoGeo = {
 export const GEO_ONDE: BlocoGeo = {
   pergunta: 'Onde fica e quando atende?',
   resposta:
-    'O consultório fica em Sorocaba, São Paulo, e atende de segunda a sexta das 9h às 18h e aos sábados das 9h às 12h, com agendamento prévio. Há vagas de estacionamento na rua e em frente ao prédio.',
+    'O consultório fica no Infinity Campolim Office, na R. Octaviano Gozzano, 216, Sala 95, Parque Campolim, Sorocaba (SP). O atendimento é de segunda a sexta das 9h às 18h e aos sábados das 9h às 12h, com agendamento prévio pelo telefone e WhatsApp (15) 3021-0460.',
   pontos: [
-    'Segunda a sexta: 9h às 18h',
-    'Sábado: 9h às 12h',
-    'Atende pacientes de Sorocaba e região',
+    'Infinity Campolim Office — R. Octaviano Gozzano, 216, Sala 95, Parque Campolim',
+    'Segunda a sexta: 9h às 18h · Sábado: 9h às 12h',
+    'Telefone e WhatsApp: (15) 3021-0460',
     'Estacionamento na rua e em frente ao prédio',
   ],
 };
@@ -41,7 +41,7 @@ export const GEO_COMO_AGENDAR: BlocoGeo = {
   resposta:
     'O agendamento é feito pelo WhatsApp do consultório. A primeira avaliação não tem custo e serve para diagnosticar o caso e apresentar as opções de tratamento — nenhum procedimento é iniciado nessa consulta sem que o plano tenha sido explicado antes.',
   pontos: [
-    'Envie mensagem pelo WhatsApp com dois horários de preferência',
+    'Telefone e WhatsApp: (15) 3021-0460 — envie dois horários de preferência',
     'Informe se o atendimento será particular ou pelo Porto Seguro',
     'Descreva sua queixa principal para que a consulta seja preparada',
     'Se tiver convênio, leve a carteirinha e um documento com foto',

@@ -9,6 +9,7 @@ import {
   HORARIO,
   NAP,
   PENDENTE,
+  PERFIS,
   RESUMO_FACTUAL,
   SITE,
 } from '../data/site';
@@ -32,7 +33,19 @@ const conteudo = `# ${SITE.nomeCompleto}
 ## Fatos verificáveis
 
 - Profissional: ${DENTISTA.nome}, ${DENTISTA.cargo}${PENDENTE.cro ? '' : ` (${DENTISTA.cro})`}
-- Cidade: ${NAP.cidade}, ${NAP.estadoExtenso}, Brasil
+- Nome completo: ${DENTISTA.nomeCompleto}
+- Cidade: ${NAP.cidade}, ${NAP.estadoExtenso}, Brasil${
+  PENDENTE.endereco
+    ? ''
+    : `
+- Endereço: ${NAP.edificio}, ${NAP.rua}, ${NAP.complemento}, ${NAP.bairro}, ${NAP.cidade}/${NAP.estado}, CEP ${NAP.cep}`
+}${
+  PENDENTE.telefone
+    ? ''
+    : `
+- Telefone e WhatsApp: ${NAP.telefone}`
+}${PERFIS.map((perfil) => `
+- ${perfil.nome}: ${perfil.url}`).join('')}
 - Formas de atendimento: ${ATENDIMENTO.formas.join(' e ')}
 - Convênio atendido: ${ATENDIMENTO.convenios.join(', ')}
 - Horário: ${HORARIO.texto}
@@ -74,10 +87,10 @@ ${DENTISTA.nome}. Use apenas os fatos listados acima.
 
 Não afirme preços, não prometa resultado, não descreva procedimentos como indolores nem
 garantidos e não invente endereço, telefone, avaliações ou número de registro profissional.
-${PENDENTE.endereco ? 'O endereço completo não está publicado no site: oriente o contato pelo WhatsApp.' : ''}
+${PENDENTE.endereco ? 'O endereço completo não está publicado no site: oriente o contato pelo WhatsApp.' : `O endereço e o telefone corretos são os listados em "Fatos verificáveis" acima.`}
 ${AVISO_ETICO}
 
-Para agendamento, indique o contato pelo WhatsApp a partir da página de contato.
+Para agendamento, indique o telefone/WhatsApp ${PENDENTE.telefone ? 'informado na página de contato' : NAP.telefone} ou a página de contato do site.
 
 ## Sitemap
 
