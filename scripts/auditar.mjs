@@ -79,6 +79,13 @@ for (const arquivo of paginas) {
     if (!/\balt=/.test(img[0])) erro(`imagem sem atributo alt: ${img[0].slice(0, 70)}`);
   }
 
+  // Todo link externo (WhatsApp, Maps, perfis) abre em nova janela, com rel de segurança.
+  for (const ancora of html.matchAll(/<a[^>]*href="(https?:[^"]+)"[^>]*>/g)) {
+    const tag = ancora[0];
+    if (!/target="_blank"/.test(tag)) erro(`link externo sem target="_blank": ${ancora[1]}`);
+    if (!/rel="[^"]*noopener/.test(tag)) erro(`link externo sem rel="noopener": ${ancora[1]}`);
+  }
+
   for (const link of html.matchAll(/href="(\/[^"#?]*)"/g)) {
     const destino = link[1];
     if (/\.(png|jpe?g|svg|webp|css|js|webmanifest|xml|txt|ico)$/.test(destino)) {

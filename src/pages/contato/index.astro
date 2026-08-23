@@ -64,7 +64,7 @@ const passos = [
         diagnosticar o caso e apresentar as opções de tratamento.
       </p>
       <div class="botoes">
-        <a class="btn btn--principal" href={whatsappHref} rel="noopener">Falar pelo WhatsApp</a>
+        <a class="btn btn--principal" href={whatsappHref} target="_blank" rel="noopener">Falar pelo WhatsApp</a>
         {!PENDENTE.telefone && <a class="btn btn--contorno" href={telHref}>{NAP.telefone}</a>}
       </div>
     </div>
@@ -99,7 +99,7 @@ const passos = [
               </p>
               {NAP.mapsUrl && (
                 <p class="botoes">
-                  <a class="btn btn--contorno" href={NAP.mapsUrl} rel="noopener">
+                  <a class="btn btn--contorno" href={NAP.mapsUrl} target="_blank" rel="noopener">
                     Abrir no Google Maps
                   </a>
                   <a class="btn btn--contorno" href={telHref}>
@@ -120,7 +120,7 @@ const passos = [
           {
             PERFIS.map((perfil) => (
               <li>
-                <a href={perfil.url} rel="noopener me">
+                <a href={perfil.url} target="_blank" rel="noopener me">
                   {perfil.nome}
                 </a>
               </li>
@@ -156,7 +156,7 @@ const passos = [
             <div><dt>E-mail</dt><dd><a href={`mailto:${NAP.email}`}>{NAP.email}</a></dd></div>
           )}
         </dl>
-        <a class="btn btn--principal painel__btn" href={whatsappHref} rel="noopener">
+        <a class="btn btn--principal painel__btn" href={whatsappHref} target="_blank" rel="noopener">
           Agendar pelo WhatsApp
         </a>
       </aside>

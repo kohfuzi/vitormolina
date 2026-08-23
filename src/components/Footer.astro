@@ -44,14 +44,14 @@ const ano = new Date().getFullYear();
         }
         {!PENDENTE.telefone && <a href={telHref}>{NAP.telefone}</a>}
         {NAP.email && <a href={`mailto:${NAP.email}`}>{NAP.email}</a>}
-        <a href={whatsappHref} rel="noopener">Agendar pelo WhatsApp</a>
+        <a href={whatsappHref} target="_blank" rel="noopener">Agendar pelo WhatsApp</a>
       </address>
 
       <ul class="rodape__perfis">
         {
           PERFIS.map((perfil) => (
             <li>
-              <a href={perfil.url} rel="noopener me">
+              <a href={perfil.url} target="_blank" rel="noopener me">
                 {perfil.nome === 'Perfil da Empresa no Google' ? 'Google' : perfil.nome}
               </a>
             </li>

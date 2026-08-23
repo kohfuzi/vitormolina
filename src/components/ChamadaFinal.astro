@@ -18,7 +18,7 @@ const {
       <h2>{titulo}</h2>
       <p class="chamada__texto">{texto}</p>
       <div class="botoes">
-        <a class="btn btn--claro" href={whatsappHref} rel="noopener">Agendar pelo WhatsApp</a>
+        <a class="btn btn--claro" href={whatsappHref} target="_blank" rel="noopener">Agendar pelo WhatsApp</a>
         {!PENDENTE.telefone && <a class="btn btn--contorno btn--claro-contorno" href={telHref}>{NAP.telefone}</a>}
       </div>
     </div>
