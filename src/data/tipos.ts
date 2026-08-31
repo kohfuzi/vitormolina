@@ -41,6 +41,8 @@ export type Artigo = {
   publicadoEm: string; // ISO yyyy-mm-dd
   atualizadoEm: string; // ISO yyyy-mm-dd
   tempoLeitura: number; // minutos
+  resumoAutor?: string; // substitui a linha padrão da caixa do autor (para artigos fora do tema clínico)
+  tipoPagina?: 'MedicalWebPage' | 'WebPage'; // default 'MedicalWebPage'; usar 'WebPage' para artigos não clínicos
   fatos: Fato[];
   secoes: Secao[];
   faq: Faq[];
@@ -53,7 +55,8 @@ export type Bloco =
   | { tipo: 'ul'; itens: string[] }
   | { tipo: 'ol'; itens: string[] }
   | { tipo: 'callout'; titulo: string; itens: string[] }
-  | { tipo: 'tabela'; cabecalho: string[]; linhas: string[][] };
+  | { tipo: 'tabela'; cabecalho: string[]; linhas: string[][] }
+  | { tipo: 'link'; texto: string; url: string };
 
 export type Secao = {
   id: string; // âncora + índice do artigo

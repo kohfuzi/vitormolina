@@ -2,6 +2,7 @@ import type { Artigo } from './tipos';
 import { artigo as implanteOuProtocolo } from './artigos/implante-ou-protocolo';
 import { artigo as harmonizacaoFacial } from './artigos/harmonizacao-facial-com-dentista';
 import { artigo as tratamentoDeCanal } from './artigos/tratamento-de-canal';
+import { artigo as a2odontoExperiencia } from './artigos/a2odonto-experiencia';
 
 /**
  * Seção de artigos. Cada artigo é um objeto de dados completo (metadados +
@@ -11,7 +12,12 @@ import { artigo as tratamentoDeCanal } from './artigos/tratamento-de-canal';
  * Para publicar um novo artigo: crie o arquivo em src/data/artigos/,
  * exporte `artigo` e adicione-o na lista abaixo. Nada mais precisa ser tocado.
  */
-export const ARTIGOS: Artigo[] = [implanteOuProtocolo, harmonizacaoFacial, tratamentoDeCanal];
+export const ARTIGOS: Artigo[] = [
+  implanteOuProtocolo,
+  harmonizacaoFacial,
+  tratamentoDeCanal,
+  a2odontoExperiencia,
+];
 
 /** Mais recentes primeiro. */
 export const artigosOrdenados = (): Artigo[] =>

@@ -39,6 +39,13 @@ const { secoes } = Astro.props;
                 </ul>
               </aside>
             )}
+            {bloco.tipo === 'link' && (
+              <p class="corpo__link">
+                <a href={bloco.url} target="_blank" rel="noopener">
+                  {bloco.texto}
+                </a>
+              </p>
+            )}
             {bloco.tipo === 'tabela' && (
               <div class="tabela-envolucro">
                 <table>
@@ -121,6 +128,17 @@ const { secoes } = Astro.props;
     color: var(--petroleo);
     font-weight: 650;
     font-size: 0.9rem;
+  }
+  .corpo__link a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 600;
+  }
+  .corpo__link a::after {
+    content: '↗';
+    font-weight: 400;
+    color: var(--dourado);
   }
   .destaque {
     background: var(--dourado-suave);

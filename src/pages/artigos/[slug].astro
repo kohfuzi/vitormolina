@@ -62,7 +62,7 @@ const schema = grafo(
   consultorioSchema(),
   pessoaSchema(),
   siteSchema(),
-  paginaSchema({ url, titulo: a.tituloSeo, descricao: a.metaDescricao, tipo: 'MedicalWebPage' }),
+  paginaSchema({ url, titulo: a.tituloSeo, descricao: a.metaDescricao, tipo: a.tipoPagina ?? 'MedicalWebPage' }),
   migalhasSchema(migalhas),
   artigoSchema(a, url),
   faqSchema(a.faq)
@@ -130,8 +130,12 @@ const schema = grafo(
             <div>
               <strong>{DENTISTA.nome}</strong>
               <span>
-                {DENTISTA.cargo} em Sorocaba (SP){!PENDENTE.cro && <> · {DENTISTA.cro}</>}. Atende
-                particular e Porto Seguro, do diagnóstico ao acompanhamento.
+                {a.resumoAutor ?? (
+                  <>
+                    {DENTISTA.cargo} em Sorocaba (SP){!PENDENTE.cro && <> · {DENTISTA.cro}</>}. Atende
+                    particular e Porto Seguro, do diagnóstico ao acompanhamento.
+                  </>
+                )}
               </span>
               <a class="btn btn--principal btn--autor" href={whatsappHref} target="_blank" rel="noopener">
                 Agendar avaliação
