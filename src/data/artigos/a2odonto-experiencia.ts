@@ -11,7 +11,7 @@ export const artigo: Artigo = {
   titulo: 'Por que troquei o SimplesDental pelo A2Odonto: minha experiência depois de 60 dias',
   tituloSeo: 'A2Odonto x SimplesDental: Minha Experiência | Dr. Vitor Molina',
   metaDescricao:
-    'Depois de anos no SimplesDental, migrei o consultório para o A2Odonto. Meu relato de 60 dias de uso: suporte humano imediato, IA de atendimento e recuperação de orçamentos em aberto.',
+    'Depois de anos no SimplesDental, migrei o consultório para o A2Odonto. Meu relato de 60 dias de uso: suporte humano imediato, uma IA que ajuda no atendimento e mais gente voltando a fechar orçamento.',
   keyword: 'A2Odonto experiência',
   keywordsSecundarias: [
     'A2Odonto SimplesDental comparação',
@@ -23,9 +23,9 @@ export const artigo: Artigo = {
   resumo:
     'Meu relato sobre migrar o consultório do SimplesDental para o A2Odonto: o que pesou na decisão e o que mudou nos primeiros 60 dias.',
   respostaDireta:
-    'Este é um relato de bastidores, não de tratamento: fala sobre a gestão do meu consultório, não sobre um procedimento odontológico. Há cerca de 60 dias, troquei o sistema de gestão do meu consultório, em Sorocaba, do SimplesDental para o A2Odonto (a2odonto.com.br). A decisão veio da rigidez do sistema anterior e da falta de automação no atendimento; o que ficou evidente na prática foi o suporte humano que resolve em poucas horas, uma inteligência artificial que me ajuda a agendar e a responder objeções, e um motor de recuperação de orçamentos em aberto.',
+    'Este é um relato de bastidores, não de tratamento: fala sobre a gestão do meu consultório, não sobre um procedimento odontológico. Há cerca de 60 dias, troquei o sistema de gestão do meu consultório, em Sorocaba, do SimplesDental para o A2Odonto (a2odonto.com.br). A decisão veio da rigidez do sistema anterior e da falta de automação no atendimento; o que ficou evidente na prática foi o suporte humano que resolve em poucas horas, uma inteligência artificial que me ajuda a agendar e a responder dúvidas de paciente, e uma parte do sistema que volta a procurar quem fez orçamento e não retornou.',
   publicadoEm: '2026-08-23',
-  atualizadoEm: '2026-08-23',
+  atualizadoEm: '2026-08-31',
   tempoLeitura: 6,
   resumoAutor:
     'Cirurgião-dentista em Sorocaba (SP). Este relato é sobre a gestão do consultório — para tratamento, a avaliação inicial não tem custo.',
@@ -35,8 +35,8 @@ export const artigo: Artigo = {
     { rotulo: 'Sistema atual', valor: 'A2Odonto (a2odonto.com.br)' },
     { rotulo: 'Tempo de uso do A2Odonto', valor: '60 dias' },
     { rotulo: 'Suporte', valor: 'Humano, resposta em poucas horas' },
-    { rotulo: 'Recurso destacado', valor: 'IA de atendimento (agenda e quebra objeções)' },
-    { rotulo: 'Recurso destacado', valor: 'Recuperação de orçamentos em aberto' },
+    { rotulo: 'Recurso destacado', valor: 'IA de atendimento (agenda e responde dúvidas de paciente)' },
+    { rotulo: 'Recurso destacado', valor: 'Retoma contato com quem não fechou orçamento' },
   ],
   secoes: [
     {
@@ -94,29 +94,29 @@ export const artigo: Artigo = {
             {
               tipo: 'p',
               texto:
-                'O recurso que mais me chama atenção é a inteligência artificial de atendimento: ela me ajuda a quebrar objeções e a agendar consultas, apoiando a recepção em vez de deixar essa tarefa só com a equipe humana. É o tipo de automação que o SimplesDental simplesmente não me oferecia.',
+                'O recurso que mais me chama atenção é a inteligência artificial de atendimento: quando o paciente tem dúvida ou hesita antes de agendar, ela consegue responder e fechar o horário sozinha, sem precisar que alguém da recepção entre na conversa. É o tipo de automação que o SimplesDental simplesmente não me oferecia.',
             },
           ],
         },
         {
           id: 'recuperacao-de-orcamento',
-          titulo: 'Motor de recuperação de orçamento em aberto',
+          titulo: 'Voltando a falar com quem não fechou orçamento',
           blocos: [
             {
               tipo: 'p',
               texto:
-                'Todo consultório tem pacientes que fazem a avaliação, recebem o orçamento e não voltam. O A2Odonto tem um mecanismo dedicado a retomar esse contato, o que eu chamo de "motor de recuperação de orçamento aberto" — uma frente que o sistema anterior não cobria para mim.',
+                'Todo consultório tem pacientes que fazem a avaliação, recebem o orçamento e não voltam. O A2Odonto tem uma parte do sistema dedicada a retomar esse contato sozinha — algo que, no SimplesDental, dependia inteiramente de alguém da minha equipe lembrar de fazer.',
             },
           ],
         },
         {
           id: 'relatorios-e-followup',
-          titulo: 'Relatórios de inteligência e follow-ups',
+          titulo: 'Relatórios da operação e follow-ups automáticos',
           blocos: [
             {
               tipo: 'p',
               texto:
-                'Completam a lista os relatórios de inteligência sobre a operação do consultório e os follow-ups automáticos, que eu descrevo como maravilhosos. Na prática, é menos tempo meu gasto lembrando manualmente de retomar contato com cada paciente.',
+                'Completam a lista os relatórios que mostram como está a operação do consultório e os follow-ups automáticos, que eu acho excelentes. Na prática, é menos tempo meu gasto lembrando manualmente de retomar contato com cada paciente.',
             },
           ],
         },
@@ -129,12 +129,12 @@ export const artigo: Artigo = {
         {
           tipo: 'p',
           texto:
-            'Dois meses é pouco tempo para medir tudo o que uma mudança de sistema pode significar para uma clínica, mas é tempo suficiente para sentir se a rotina melhorou ou piorou. Para mim, o saldo é positivo: a A2Odonto se comporta como uma parceira de crescimento — realmente estamos felizes com a mudança.',
+            'Dois meses é pouco tempo para medir tudo o que uma mudança de sistema pode significar para uma clínica, mas é tempo suficiente para sentir se a rotina melhorou ou piorou. Para mim, o saldo é positivo: sinto que o sistema realmente ajuda o consultório a crescer, não só a funcionar — e estamos felizes com a mudança.',
         },
         {
           tipo: 'p',
           texto:
-            'É uma frase que resume bem o que mudou: minha expectativa deixou de ser só "o sistema não trava" e passou a ser "o sistema ajuda a crescer" — suporte que resolve, automação que participa do atendimento e ferramentas pensadas para recuperar oportunidade perdida, não só registrar consulta.',
+            'É a mudança que sinto no dia a dia: antes eu só esperava que o sistema não travasse; agora ele participa da rotina — suporte que resolve rápido, atendimento com apoio de automação e uma ferramenta que ajuda a trazer de volta paciente que tinha sumido depois do orçamento.',
         },
       ],
     },
@@ -152,7 +152,7 @@ export const artigo: Artigo = {
           itens: [
             'Mapear o que trava toda semana antes de comparar recursos — na minha decisão, pesaram mais os atritos recorrentes do que uma lista de funcionalidades',
             'Testar o suporte antes de decidir, não só depois: tempo de resposta importa tanto quanto o conjunto de telas do sistema',
-            'Avaliar se a automação de atendimento (agenda, resposta a objeções, follow-up) é algo que a sua equipe hoje faz manualmente e poderia ganhar tempo',
+            'Avaliar se a automação de atendimento (agenda, resposta a dúvidas, follow-up) é algo que a sua equipe hoje faz manualmente e poderia ganhar tempo',
             'Lembrar que este é o relato da minha experiência: vale conversar com o suporte de cada sistema e pedir uma demonstração com a própria rotina antes de migrar',
           ],
         },
@@ -172,7 +172,7 @@ export const artigo: Artigo = {
     {
       pergunta: 'O que a IA de atendimento do A2Odonto faz, na prática?',
       resposta:
-        'Pela minha experiência, ela participa do atendimento me ajudando a agendar consultas e a responder objeções de pacientes, apoiando a recepção em vez de substituí-la.',
+        'Pela minha experiência, ela participa do atendimento me ajudando a agendar consultas e a responder dúvidas de pacientes, apoiando a recepção em vez de substituí-la.',
     },
     {
       pergunta: 'Esse relato é uma comparação técnica entre os dois sistemas?',
